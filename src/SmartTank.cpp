@@ -1,16 +1,12 @@
 #include "SmartTank.h"
 
 SmartTank::SmartTank() {
-	m_CurrentState = State::Idle;
-	m_bRotate = true;
-	m_bMoveToPos = false;
-	m_bHasDesiredPos = false;
+	
 }
 
 /////////////////State Functions/////////////////
 void SmartTank::m_Idle() {
 	m_CurrentState = State::Patrol;
-	
 }
 
 void SmartTank::m_Patrol() {
@@ -23,6 +19,30 @@ void SmartTank::m_Evade(){
 
 void SmartTank::m_Attack() {
 
+}
+
+void SmartTank::m_Update() {
+	if (m_bShellSpotted) {
+		//Check if oncoming
+			//Evade
+		//else ignore
+
+		//Trace bullet
+			//Set predicted enemy pos
+	}
+	if (m_bEnemySpotted) {
+		//Calculate enemy heading
+		m_DesiredPos = m_EnemyCurrPos;
+		m_bHasDesiredPos = true;
+		//Track enemy 
+			//Fast rotate towards enemy
+	}
+	if (m_bBaseSpotted) {
+
+	}
+	if (m_bEnemyBaseSpotted) {
+
+	}
 }
 
 //////////////////////Calculations/////////////////
@@ -61,7 +81,7 @@ float SmartTank::m_rotationDifference(Position pos, float heading, Position targ
 bool SmartTank::m_rotateTowards(Position targetPosition) {
 	float fDirection = m_rotationDifference(this->pos, targetPosition);			//Also distance
 	
-	float fRotationAccuracy = 1.0f;
+	float fRotationAccuracy = 1.0f;	//Determines when tank will adjust rotation
 	//Check if rotation destination has been achieved
 	if (fabs(fDirection) < fRotationAccuracy) {
 		return true;	//Target rotation achieved
@@ -106,52 +126,56 @@ void SmartTank::setDesiredPos(Position newPos) {
 ///////////////Inherited AI TANK FUNCTIONS//////
 void SmartTank::reset() {
 	m_CurrentState = State::Idle;	//Initial State
-	m_DesiredPos = pos;				//Desired Position is current Position
 
-	//Flags
-	m_bHasDesiredPos = false;		//Stop movement
+	//Movement
+	m_bHasDesiredPos = false;
 	m_bMoveToPos = false;
+	m_bTurretOnTarget = false;
+	m_bFastRotation = false;
 }
 
 void SmartTank::move() {
 	//Decisions made here
 
-		//States determine how tank will move/not
-	switch (m_CurrentState)
-	{
-	case State::Idle:
+	m_Update();
 
-		break;
-	case State::Evade:
-
-		break;
-	case State::Patrol:
-
-		break;
-	case State::Attack:
-
-		break;
-	default:
-		break;
-	}
-
+	//States determine how tank will move/not
 	if (true) {
+		//Reset Movement/Rotation
+		this->stop();
+		this->stopTurret();
 		if (m_bHasDesiredPos) {
 			//Rotate Turret
-			if (m_rotateTurretTowards(m_DesiredPos)) {
-				m_bTurretOnTarget = true;
-				this->stop();
-			}
-			//Rotate Tank
-			if (m_rotateTowards(m_DesiredPos)) {
-				this->stop();
-				this->goForward();
+			if (m_bEnemySpotted) {
+				if (m_rotateTurretTowards(m_DesiredPos)) {
+					m_bTurretOnTarget = true;
+				}
+				else {
+					m_bTurretOnTarget = false;
+				}
+				//Rotate Tank
+				if (m_rotateTowards(m_DesiredPos)) {
+					this->goForward();
+				}
+				m_bEnemySpotted = false;
 			}
 		}
 		else {
 
 		}
 	}
+
+	//Reset Flags
+		//Movement
+	m_bHasDesiredPos = false;
+	m_bMoveToPos = false;
+	m_bTurretOnTarget = false;
+
+		//Vision
+	m_bShellSpotted = false;
+	m_bEnemySpotted = false;
+	m_bBaseSpotted = false;
+	m_bEnemyBaseSpotted = false;
 }
 
 void SmartTank::collided() {
@@ -160,17 +184,41 @@ void SmartTank::collided() {
 
 void SmartTank::markTarget(Position p) {
 	//Enemy base spotted
+	if (m_vEnemyBasePos.size() <= 0) {
+		m_vEnemyBasePos.push_back(p);
+		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
+	}
+	else {
+		if (!findMatch(p, m_vEnemyBasePos)) {
+			m_vEnemyBasePos.push_back(p);
+			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
+		}
+	}
+	m_bEnemyBaseSpotted = true;
 }
 
 void SmartTank::markEnemy(Position p) {
-	//Enemy Target has been spotted
-		//Change State?
-	m_DesiredPos = p;
-	m_bHasDesiredPos = true;
+	//Enemy Tank has been spotted
+	m_EnemyPrevPos = m_EnemyCurrPos;	//Store Previous position
+	m_EnemyCurrPos = p;						//Store new enemy position
+	m_bEnemySpotted = true;
+	//std::cout << "Enemy Spotted: x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 }
 
 void SmartTank::markBase(Position p) {
 	//Base spotted
+	//Loops through bases found and compares the base spotted
+	if (m_vBasePos.size() <= 0) {
+		m_vBasePos.push_back(p);
+		std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
+	}
+	else {
+		if (!findMatch(p, m_vBasePos)) {		//Iterate through bases spotted and check if they have already been found
+			m_vBasePos.push_back(p);
+			std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
+		}
+	}
+	m_bBaseSpotted = true;		//Tank can see base
 }
 
 void SmartTank::markShell(Position p) {
@@ -180,7 +228,7 @@ void SmartTank::markShell(Position p) {
 bool SmartTank::isFiring() {
 	if (m_bTurretOnTarget) {
 		m_bTurretOnTarget = false;
-		return true;
+		return false;
 	}
 	return false;
 }

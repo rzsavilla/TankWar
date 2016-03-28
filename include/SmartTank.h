@@ -1,31 +1,58 @@
 /*! \class SmartTank
 \brief AI Tank implementation FSM
 AI for tank using Finite State Machine approach.
+
+	Tank vision, calculations and actions occur here
 */
 
 #ifndef SMARTTANK_H
 #define SMARTTANK_H
 
 #include "aitank.h"
+#include "Vision.h"
+#include "MoveControl.h"
+#include "Calculations.h"
 
 enum class State { Idle, Evade, Patrol, Attack }; //Tank State
 
-class SmartTank : public  AITank{
-private:
-	State m_CurrentState;	//!< Current Tank State
-	Position m_DesiredPos;	//!< Tank will move to this position
-	bool m_bHasDesiredPos;	//!< Flag ensuring new position has been set
-	bool m_bMoveToPos;		//!< Tank will move towards desired position
-	bool m_bRotate;
-	bool m_bTurretOnTarget;
+class SmartTank : public  AITank, public MoveControl, public Vision {
+protected:
+	State m_CurrentState;			//!< Current Tank State
+	Position m_DesiredPos;			//!< Tank will move to this position
+	Position m_DesiredTurretPos;	//!< Turret will rotate towards this
 
-private: //double access modifiers to seperate varibales and functions (*Easier to read)
+	bool m_bHasDesiredPos;			//!< Flag ensuring new position has been set
+	bool m_bMoveToPos;				//!< Tank will move towards desired position
+	bool m_bTurretOnTarget;			//!< Turret is on target/Ready to fire
+	bool m_bFastRotation;			//!< Tank will rotate with the turret
+
+	//Vision What the Tank can see
+	bool m_bShellSpotted;			//!< Can see a shell
+	bool m_bEnemySpotted;			//!< Can see the enemy tank
+	bool m_bBaseSpotted;			//!< Can see at least 1 base
+	bool m_bEnemyBaseSpotted;		//!< Can see at least 1 enemy base
+	bool m_bEnemyMoving;			//!< Can see that the enemy is moving
+
+	Position m_ShellPrevPos;		//!< Previous position of shell
+	Position m_ShellCurrPos;		//!< Current position of shell
+	Position m_EnemyPrevPos;		//!< Previous position of enemy tank
+	Position m_EnemyCurrPos;		//!< Latest position of enemy tank
+	std::vector<Position> m_vBasePos;		//!< Positions of spotted bases
+	std::vector<Position> m_vEnemyBasePos;	//!< Positions of spotted enemy bases
+
+protected: //double access modifiers to seperate variables and functions (*Easier to read)
 	//State Actions
-	void m_Idle();			//! Actions when Idle
+	void m_Idle();			//!< Actions when Idle
 	void m_Patrol();		//!< Actions when patrolling
 	void m_Evade();			//!< Action when evading
 	void m_Attack();		//!< Actions when attacking
 
+	void m_resetMovement(); //!< Sets all movement flags to false;
+	void m_resetVision();	//!< Sets all vision flags to false;
+	void m_Update();		//!< 
+
+	void m_ChangeState(State newState);
+ 
 	//Calculations/Actions
 		//These functions will be moved to another class
 	float m_rotationDifference(Position pos, Position targetPos);	//!< Returns angle difference/distance between this position and other position
@@ -50,10 +77,7 @@ protected:
 public:
 	SmartTank();					//!< Default Contructor
 
-
-
-
-
+public:
 	//////////////////Virtual functions inherited from AI tank///////////////////////////
 	void reset();		//!< Reset any variables you need to whent he tank has been shot
 	void move();		//!< Move the tank
