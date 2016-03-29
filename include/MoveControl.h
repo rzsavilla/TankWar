@@ -8,7 +8,7 @@ protected:
 	bool bTurretOnTarget;	//!< Turret is on target/Ready to fire
 	bool bFastRotation;		//!< Tank will rotate with the turret
 public:
-	void resetMove();		//!< Sets all movement flags to false;
+	void resetMoveControl();		//!< Sets all movement flags to false;
 };
 
 #endif
