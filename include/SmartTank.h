@@ -12,6 +12,12 @@ AI for tank using Finite State Machine approach.
 #include "Vision.h"
 #include "MoveControl.h"
 #include "Calculations.h"
+#include "myVector.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+using namespace std;
+using namespace sf;
 
 enum class State { Idle, Evade, Patrol, Attack }; //Tank State
 
@@ -49,6 +55,18 @@ protected: //double access modifiers to seperate variables and functions (*Easie
 
 	void setDesiredPos(Position newPos);	//!< Tank will move towards set Position \param newPos Target Position
 
+	string sCurrentState;					//!< String for the position in the decision tree
+	void setCurrentState(string nextState); //!< change the position in the tree
+	
+
+private:
+	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times
+
+	// some functions of actions that the tank will need to perform
+	void spinTankAndTurret();  //!< spin tank and turret by 1 degree to the right
+	bool willShellHit(Position ptank, Position pshell, Position pprevShell);
+	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
+
 protected:
 
 public:
@@ -82,6 +100,8 @@ public:
 	bool isFiring(); //!< Called by the game object each frame.  When this function returns true (and ammo is availbe and loaded) the tank will fire a shell
 
 	void score(int thisScore, int enemyScore);		//!< Notifies tank of current Score
+
+	void decisionTree(); //!< called to updated the action the tank should be taking
 };
 
 #endif

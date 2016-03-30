@@ -13,15 +13,8 @@ public:
 
 	  void move(); // Move tank
 	  void fire(); // Fire shell
-	  void reset(){}; // Reset variables
+	  void reset(){}; // Reset variables 
 
-	  void decisionTree();
-	  
-
-private:
-	string sCurrentState;
-	void setCurrentState(string nextState);
-	void makeDecision(bool decision);
 	
 };
 #endif

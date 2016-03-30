@@ -6,8 +6,8 @@
 
 class Vision {
 private:
-	const int iNumBases = 6;				//!< Max number of Bases, Used to determine when all bases found
-	const int iNumEnemyBases = 6;			//!< Max number of Enemy Bases, Used to determine when all bases found 
+	static const int iNumBases = 6;				//!< Max number of Bases, Used to determine when all bases found
+	static const int iNumEnemyBases = 6;			//!< Max number of Enemy Bases, Used to determine when all bases found 
 protected:
 	int iMyScore;							//!< Stores current score
 	int iEnemyScore;						//!< Stores enemy score
