@@ -43,7 +43,7 @@ static float rotationDiff(Position pos1, Position pos2, float heading) {
 */
 
 static bool findMatch(Position pos, std::vector<Position> vPositions) {
-	for (int i = 0; i < vPositions.size(); i++) {	//Check if position has already been stored
+	for (unsigned int i = 0; i < vPositions.size(); i++) {	//Check if position has already been stored
 		if (vPositions.at(i).getX() == pos.getX()) {
 			if (vPositions.at(i).getY() == pos.getY()) {
 				return true;		//Match found remaining checks/loop ends

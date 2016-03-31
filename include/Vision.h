@@ -8,7 +8,7 @@ class Vision {
 private:
 	static const int iNumBases = 6;				//!< Max number of Bases, Used to determine when all bases found
 	static const int iNumEnemyBases = 6;			//!< Max number of Enemy Bases, Used to determine when all bases found 
-protected:
+public:
 	int iMyScore;							//!< Stores current score
 	int iEnemyScore;						//!< Stores enemy score
 	Position shellPrevPos;					//!< Previous position of shell
@@ -26,7 +26,7 @@ protected:
 	bool bBaseSpotted;			//!< Can see at least 1 base
 	bool bEnemyBaseSpotted;		//!< Can see at least 1 enemy base
 	bool bEnemyMoving;			//!< Can see that the enemy is moving
-protected:
+public:
 	void resetVision();			//!< Set all boolean variables to false
 };
 

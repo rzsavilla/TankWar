@@ -8,13 +8,13 @@ AI for tank using Finite State Machine approach.
 #ifndef SMARTTANK_H
 #define SMARTTANK_H
 
+#include <iostream>
+
 #include "aitank.h"
 #include "Vision.h"
 #include "MoveControl.h"
 #include "Calculations.h"
 #include "myVector.h"
-#include <SFML/Graphics.hpp>
-#include <iostream>
 
 using namespace std;
 using namespace sf;
@@ -29,14 +29,10 @@ protected:
 
 protected: //double access modifiers to seperate variables and functions (*Easier to read)
 	//State Actions
-	void m_Idle();			//!< Actions when Idle
-	void m_Patrol();		//!< Actions when patrolling
-	void m_Evade();			//!< Action when evading
-	void m_Attack();		//!< Actions when attacking
 
 	void m_resetMovement(); //!< Sets all movement flags to false;
 	void m_resetVision();	//!< Sets all vision flags to false;
-	void m_Update();		//!< 
+	void m_Update();		//!< Run Behaviour tree
 
 	void m_ChangeState(State newState);
  
@@ -60,10 +56,13 @@ protected: //double access modifiers to seperate variables and functions (*Easie
 	
 
 private:
+	//Note * replace this with Decorator repeat node
 	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times
 
 	// some functions of actions that the tank will need to perform
 	void spinTankAndTurret();  //!< spin tank and turret by 1 degree to the right
+	
+	//Note * put this in Calculations class
 	bool willShellHit(Position ptank, Position pshell, Position pprevShell);
 	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
 
@@ -75,7 +74,7 @@ public:
 public:
 	//////////////////Virtual functions inherited from AI tank are defined by this class///////////////
 	void reset();		//!< Reset any variables you need to whent he tank has been shot
-	void move();		//!< Move the tank
+	//void move();		//!< Move the tank
 	void collided();	//!< Called by the game object when the tank has collided
 
 	/*! Called by the game object when a target (enemy building) comes within the tanks visible range

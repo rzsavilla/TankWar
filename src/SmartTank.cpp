@@ -1,55 +1,13 @@
 #include "SmartTank.h"
 
-SmartTank::SmartTank() {
+SmartTank::SmartTank()
+{
 	sCurrentState = "Idle";
 	m_iCallCounter = 0;
 }
 
-/////////////////State Functions/////////////////
-void SmartTank::m_Idle() {
-	m_CurrentState = State::Patrol;
-}
-
-void SmartTank::m_Patrol() {
-
-}
-
-void SmartTank::m_Evade(){
-
-}
-
-void SmartTank::m_Attack() {
-
-}
-
 void SmartTank::m_Update() {
-	if (bShellSpotted) {
-		//Check if oncoming
-			//Evade
-		//else ignore
 
-		//Trace bullet
-			//Set predicted enemy pos
-	}
-
-	if (bEnemySpotted) {
-		//Calculate enemy heading
-		m_DesiredPos = enemyCurrPos;
-		bHasDesiredPos = true;
-		//Track enemy 
-			//Fast rotate towards enemy
-	}
-
-	if (bBaseSpotted) {
-
-	}
-
-	if (bEnemyBaseSpotted) {
-
-	}
-	
-	decisionTree();
-	cout << sCurrentState << endl;
 }
 
 bool SmartTank::m_rotateTowards(Position targetPosition) {
@@ -104,11 +62,8 @@ void SmartTank::reset() {
 	resetVision();
 	resetMoveControl();
 }
-
+/*
 void SmartTank::move() {
-	//Decisions made here
-	m_Update();
-
 	//Print tank vision
 	std::cout << "Vision: " << "ETank:" << bEnemySpotted << " ETankM:" << bEnemyMoving 
 			  << " Shell:" << bShellSpotted << " Base:" << bBaseSpotted << " EBase:" << bEnemyBaseSpotted 
@@ -143,7 +98,7 @@ void SmartTank::move() {
 	resetMoveControl();			//Movement
 	resetVision();				//Vision
 }
-
+*/
 void SmartTank::collided() {
 
 }
@@ -167,6 +122,13 @@ void SmartTank::markEnemy(Position p) {
 	//Enemy Tank has been spotted
 	enemyPrevPos = enemyCurrPos;	//Store Previous position
 	enemyCurrPos = p;				//Store new enemy position
+	if (enemyPrevPos.getX() != enemyCurrPos.getX()
+		&& enemyPrevPos.getY() != enemyCurrPos.getY()) {
+		bEnemyMoving = true;
+	}
+	else {
+		bEnemyMoving = false;
+	}
 	bEnemySpotted = true;
 	//std::cout << "Enemy Spotted: x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 }

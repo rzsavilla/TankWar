@@ -164,7 +164,6 @@ void Game::play()// Play the game for one timestep
 	player.markPos();
 	player.move();
 
-
 	// Check for collisions
 	bool collision = false;
 	for (list<Obstacle>::iterator it = obstacles.begin(); it != obstacles.end(); ++it)

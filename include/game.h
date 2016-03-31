@@ -9,6 +9,7 @@
 #include "obstacle.h"
 #include "shell.h"
 #include "SmartTank.h"
+#include "TankMind.h"
 
 using namespace std;
 
@@ -34,7 +35,7 @@ class Game : public sf::Drawable
 		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const; // Draw the game
 		void play(); // Play the game for one timestep
 		//DumbTank npc; // Red tank
-		SmartTank npc;	// AI Red tank
+		TankMind npc;	// AI Red tank
 		PlayerTank player; // Blue tank
 		void keyPressed(sf::Keyboard::Key key); // function for processing input
 		void keyReleased(sf::Keyboard::Key key); // function for processing input
