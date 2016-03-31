@@ -9,8 +9,8 @@
 
 //Class forward declaration
 class EnemySpotted_Condition;
-class IsEnemyMoving;
 class Aim_Action;
+class PredictiveAim_Action;
 
 class CheckEnemy : public BehaviourTree::Sequence {
 private:
@@ -18,7 +18,7 @@ private:
 	SmartTank *tank;
 	EnemySpotted_Condition *enemySpotted;
 	Aim_Action *aimAction;
-	IsEnemyMoving *enemyMoving;
+	PredictiveAim_Action *predictAim;
 public:
 	CheckEnemy(SmartTank* ptr_tank);
 	~CheckEnemy();
@@ -42,6 +42,20 @@ public:
 	}
 };
 
+//Calculate enemy predicted position
+class PredictiveAim_Action : public Action {
+public:
+	PredictiveAim_Action(SmartTank* ptr_tank) {
+		this->tank = ptr_tank;
+	}
+	virtual bool run() override {
+		//Predictive calculatesion here
+			//Set Predicted target position
+		tank->predictedEnemyPos = tank->enemyCurrPos;
+		return true;
+	}
+};
+
 
 //Rotate Turret towards enemy tank/predicted aim position
 class Aim_Action : public Action{
@@ -53,38 +67,13 @@ public:
 	virtual bool run() override{
 		if (tank->bEnemySpotted) {
 			//Aim towards to enemy/target
+			tank->m_rotateTurretTowards(tank->predictedEnemyPos);
 			std::cout << "Aim\n";
 			return true;
 		}
 		else {
 			return false;
 		}
-	}
-};
-
-//Class Forward Declaration
-class PredictAimAction;
-
-class IsEnemyMoving: public BehaviourTree::Sequence {
-private:
-	SmartTank *tank;
-	PredictAimAction *predictAim;
-public:
-	IsEnemyMoving(SmartTank* ptr_tank);
-	~IsEnemyMoving();
-};
-
-//Predictive aiming
-class PredictAimAction : public Action {
-public:
-	PredictAimAction(SmartTank* ptr_tank) {
-		this->tank = ptr_tank;
-	}
-
-	virtual bool run() override {
-		//Calculate Predictive Aim here
-			//Set Predicted location
-		return true;
 	}
 };
 

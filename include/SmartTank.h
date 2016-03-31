@@ -27,7 +27,7 @@ protected:
 	Position m_DesiredPos;			//!< Tank will move to this position
 	Position m_DesiredTurretPos;	//!< Turret will rotate towards this
 
-protected: //double access modifiers to seperate variables and functions (*Easier to read)
+public: //double access modifiers to seperate variables and functions (*Easier to read)
 	//State Actions
 
 	void m_resetMovement(); //!< Sets all movement flags to false;

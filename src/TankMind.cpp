@@ -28,28 +28,7 @@ void TankMind::move() {
 
 	root->run();		//Run
 
-	//Reset Movement/Rotation
-	this->stop();
-	this->stopTurret();
-	if (bHasDesiredPos) {
-		//Rotate Turret
-		if (bEnemySpotted) {
-			if (m_rotateTurretTowards(m_DesiredPos)) {
-				bTurretOnTarget = true;
-			}
-			else {
-				bTurretOnTarget = false;
-			}
-			//Rotate Tank
-			if (m_rotateTowards(m_DesiredPos)) {
-				this->goForward();
-			}
-			bEnemySpotted = false;
-		}
-	}
-	else {
-
-	}
+	implementMove();
 
 	//Reset Flags
 	resetMoveControl();			//Movement
