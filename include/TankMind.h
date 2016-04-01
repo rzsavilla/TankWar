@@ -8,6 +8,7 @@
 #include "EnemySpotted.h"
 #include "CheckShell.h"
 #include "BuildingSpotted.h"
+#include "CheckShootTarget.h"
 
 class TankMind: public SmartTank {
 private:
@@ -15,6 +16,8 @@ private:
 	CheckEnemy *checkEnemy;
 	CheckShell *checkShell;
 	BuildingCheck *buildingCheck;
+	ShootCheck *checkShoot;
+
 public:
 	TankMind();
 	~TankMind();

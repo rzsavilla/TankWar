@@ -4,19 +4,21 @@ TankMind::TankMind() {
 	root = new BehaviourTree::Selector;
 	checkShell = new CheckShell(this);
 	checkEnemy = new CheckEnemy(this);
-	
+	checkShoot = new ShootCheck(this);
 	createBehaviour();
 }
 
 TankMind::~TankMind() {
 	delete checkEnemy;
 	delete checkShell;
+	delete checkShoot;
 	delete root;
 }
 
 void TankMind::createBehaviour() {
-	root->addChild(checkShell);				//Check for shells first
-	root->addChild(checkEnemy);
+	//root->addChild(checkShell);				//Check for shells first
+	//root->addChild(checkEnemy);
+	root->addChild(checkShoot);
 }
 
 void TankMind::move() {
