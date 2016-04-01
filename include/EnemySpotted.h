@@ -30,7 +30,6 @@ public:
 	EnemySpotted_Condition(SmartTank* ptr_tank) {
 		this->tank = ptr_tank;
 	}
-
 	virtual bool run() override {
 		if (tank->bEnemySpotted) {
 			std::cout << "Enemy Spotted\n";
