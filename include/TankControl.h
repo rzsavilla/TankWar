@@ -1,12 +1,12 @@
-/*! \class SmartTank
+/*! \class TankControl
 \brief AI Tank implementation FSM
 AI for tank using Finite State Machine approach.
 
 	Tank vision, calculations and actions occur here
 */
 
-#ifndef SMARTTANK_H
-#define SMARTTANK_H
+#ifndef TANKCONTROL_H
+#define TANKCONTROL_H
 
 #include <iostream>
 
@@ -19,22 +19,17 @@ AI for tank using Finite State Machine approach.
 using namespace std;
 using namespace sf;
 
-enum class State { Idle, Evade, Patrol, Attack }; //Tank State
-
-class SmartTank : public  AITank, public MoveControl, public Vision {
+class TankControl : public  AITank, public MoveControl, public Vision {
+private:
+	const float fRotationAccuracy = 5.0f;
+	const float fTurretRotationAccuracy = 5.0f;
 protected:
-	State m_CurrentState;			//!< Current Tank State
-	Position m_DesiredPos;			//!< Tank will move to this position
-	Position m_DesiredTurretPos;	//!< Turret will rotate towards this
-
-public: //double access modifiers to seperate variables and functions (*Easier to read)
+	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
+	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
+public: //Multiple access modifiers to seperate variables and functions (*Easier to read)
 	//State Actions
 
-	void m_resetMovement(); //!< Sets all movement flags to false;
-	void m_resetVision();	//!< Sets all vision flags to false;
-	void m_Update();		//!< Run Behaviour tree
-
-	void m_ChangeState(State newState);
+	void m_Update();		//!< Update Tank movement and vision.
  
 	/*! \brief Rotate tank towards position 
 		Changes the tank heading to face target position.
@@ -49,32 +44,24 @@ public: //double access modifiers to seperate variables and functions (*Easier t
 	*/
 	bool m_rotateTurretTowards(Position targetPosition);
 
-	void setDesiredPos(Position newPos);	//!< Tank will move towards set Position \param newPos Target Position
-
-	string sCurrentState;					//!< String for the position in the decision tree
-	void setCurrentState(string nextState); //!< change the position in the tree
-	
-
-private:
+public:
 	//Note * replace this with Decorator repeat node
 	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times
 
 	// some functions of actions that the tank will need to perform
-	void spinTankAndTurret();  //!< spin tank and turret by 1 degree to the right
 	
 	//Note * put this in Calculations class
 	bool willShellHit(Position ptank, Position pshell, Position pprevShell);
 	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
 
-protected:
-
 public:
-	SmartTank();					//!< Default Contructor
+	TankControl();					//!< Default Contructor
 
 public:
 	//////////////////Virtual functions inherited from AI tank are defined by this class///////////////
+
 	void reset();		//!< Reset any variables you need to whent he tank has been shot
-	//void move();		//!< Move the tank
+
 	void collided();	//!< Called by the game object when the tank has collided
 
 	/*! Called by the game object when a target (enemy building) comes within the tanks visible range

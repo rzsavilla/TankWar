@@ -5,37 +5,45 @@
 #ifndef CHECKSHELL_H
 #define CHECKSHELL_H
 
-#include <iostream>
 #include "Action.h"
 
-/*
-Forward Declare all Action/Condition classes
-	class myClass;
-*/
+//////////Nodes Actions/Conditions/////////////////////
+//! AI can see a shell
+class ShellSpotted_Condition: public Condition {
+public:
+	ShellSpotted_Condition(TankControl *ptr_tank);
+	virtual bool run() override;
+};
 
-class CanAvoidCondition; //Forward Declaration
+class ShellIntersect_Condition: public Condition {
+public:
+	ShellIntersect_Condition(TankControl *ptr_tank);
+	virtual bool run() override;
+};
+
+//! Calculations to check if shell can be avoided
+class CanAvoid_Condition : public Condition{
+public:
+	CanAvoid_Condition(TankControl *ptr_tank);
+	virtual bool run() override;
+};
+
+//! Move the tank away from shell path.
+class Evade_Action : public Action {
+public :
+	Evade_Action(TankControl *ptr_tank);
+	virtual bool run() override;
+};
 
 class CheckShell : public BehaviourTree::Sequence {
 private:
-	//Actions or conditions object pointers here
-	CanAvoidCondition *canAvoid;
+	ShellSpotted_Condition *shellSpotted;
+	ShellIntersect_Condition *shellIntersect;
+	CanAvoid_Condition *canAvoid;
+	Evade_Action *evade;
 public:
-	CheckShell(SmartTank* ptr_tank); //Constructor
-	~CheckShell();					 //Destructor, make sure you delete all pointers instanciated using "new"
+	CheckShell(TankControl* ptr_tank); //!< Constructor
+	~CheckShell();					   //!< Destructor, make sure you delete all pointers instanciated using "new"
 };
-
-class CanAvoidCondition : public Condition {
-public:
-	CanAvoidCondition(SmartTank* ptr_tank) {
-		this->tank = ptr_tank;
-	}
-
-	virtual bool run() override{
-		//Check if projectile is oncoming
-		return false;
-	}
-};
-
-
 
 #endif

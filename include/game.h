@@ -8,7 +8,7 @@
 #include "playerTank.h"
 #include "obstacle.h"
 #include "shell.h"
-#include "SmartTank.h"
+#include "TankControl.h"
 #include "TankMind.h"
 
 using namespace std;
