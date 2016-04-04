@@ -29,9 +29,13 @@ Reposition_Action::Reposition_Action(TankControl * ptr_tank) {
 }
 
 bool Reposition_Action::run() {
+	if (tank->tankReachedDestination(dx, dy)) {
+		tank->isMoving = false;
+		std::cout << "Reached Position\n";
+	}
 	if (!tank->isMoving) {
-		dx = (float)(rand() % 780 + 10);
-		dy = (float)(rand() % 580 + 10);
+		dx = (float)(rand() % 750 + 10);
+		dy = (float)(rand() % 540 + 10);
 		std::cout << "Repositioning\n";
 		tank->isMoving = true;
 		}

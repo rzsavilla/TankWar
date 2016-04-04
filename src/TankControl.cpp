@@ -91,6 +91,7 @@ bool TankControl::m_rotateTurretTowards(Position targetPosition) {
 void TankControl::reset() {
 	resetVision();
 	resetMoveControl();
+	isMoving = false;
 }
 
 void TankControl::collided() {
@@ -222,4 +223,13 @@ bool TankControl::checkShellProximity()
 		return true; // wont hit
 	}
 	return false; // will hit
+}
+
+bool TankControl::tankReachedDestination(float dx, float dy) {
+	float tankX = getX();
+	float tankY = getY();
+
+	if ((tankX > dx && tankX < dx + 200.f) && (tankY > dy && tankY < dy + 200.f))
+	return true;
+	else return false;
 }
