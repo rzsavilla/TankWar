@@ -53,6 +53,7 @@ public:
 	//Note * put this in Calculations class
 	bool willShellHit(Position ptank, Position pshell, Position pprevShell);
 	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
+	bool isMoving = false;; //!< Flag set when tank is moving
 
 public:
 	TankControl();					//!< Default Contructor

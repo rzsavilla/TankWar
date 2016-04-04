@@ -11,6 +11,8 @@ public:
 };
 
 class Reposition_Action : public Action {
+private:
+	float dx, dy;
 public:
 	Reposition_Action(TankControl* ptr_tank);
 	virtual bool run() override;
@@ -28,6 +30,7 @@ class CheckPatrol: public BehaviourTree::Selector{
 private:
 	Reposition_Action *reposition;
 public:
+	float dx, dy;
 	CheckPatrol(TankControl* ptr_tank);
 	~CheckPatrol();
 };
