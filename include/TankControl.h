@@ -26,6 +26,11 @@ private:
 protected:
 	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
 	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
+	bool bCollided;
+public:
+	bool hasCollided() {
+		return bCollided; 
+	}
 public: //Multiple access modifiers to seperate variables and functions (*Easier to read)
 	//State Actions
 

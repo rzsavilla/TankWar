@@ -9,15 +9,16 @@ protected:
 	bool bHasTurretDesiredPos;  //!< Turret will rotate towards desired position
 	bool bTurretOnTarget;		//!< Turret is on target/Ready to fire
 	bool bFastRotation;			//!< Tank will rotate with the turret
-
 	
 private:
 	Position m_DesiredPos;			//!< Tank will move to this position
 	Position m_DesiredTurretPos;	//!< Turret will rotate towards this
 public:
-
+	bool bHasCollided;
 	bool bRotationOnTarget;			//Tank has rotated towards desired position
 	bool bTurretRotationOnTarget;	//Turret has rotates towards desired position
+
+	bool hasCollided();				//!< Check if tank has collided
 
 	void setDesiredPosition(Position newPos);		 //!< Will set a position
 	void setDesiredPosition(float x, float y);		 //!< Will set a position

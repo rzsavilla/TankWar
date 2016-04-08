@@ -3,6 +3,7 @@
 TankControl::TankControl()
 {
 	m_iCallCounter = 0;
+	bCollided = false;
 }
 
 void TankControl::m_Update() {
@@ -95,7 +96,7 @@ void TankControl::reset() {
 }
 
 void TankControl::collided() {
-
+	bHasCollided = true;
 }
 
 void TankControl::markTarget(Position p) {

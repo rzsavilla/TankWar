@@ -1,4 +1,5 @@
 #include "MoveControl.h"
+#include <iostream>
 
 void MoveControl::setDesiredPosition(Position newPos) {
 	m_DesiredPos = newPos;
@@ -29,10 +30,15 @@ Position MoveControl::getTurretDesiredPos() {
 	return m_DesiredTurretPos;
 }
 
+bool MoveControl::hasCollided() {
+	return bHasCollided;
+}
+
 void MoveControl::resetMoveControl() {
 	bHasDesiredPos = false;
 	bHasTurretDesiredPos = false;
 	bTurretOnTarget = false;
 	bFastRotation = false;
+	bHasCollided = false;
 }
 
