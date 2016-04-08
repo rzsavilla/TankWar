@@ -12,9 +12,9 @@ TankMind::~TankMind() {
 
 void TankMind::createBehaviour() {
 	root->addChild(checkShell);
-	//root->addChild(checkEnemy);
-	//root->addChild(checkEnemyBase);
-	//root->addChild(checkPatrol);
+	root->addChild(checkEnemy);
+	root->addChild(checkEnemyBase);
+	root->addChild(checkPatrol);
 }
 
 void TankMind::move() {
