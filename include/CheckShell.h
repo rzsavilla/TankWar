@@ -44,6 +44,7 @@ private:
 	Evade_Action *evade;
 	
 public:
+	
 	CheckShell(TankControl* ptr_tank); //!< Constructor
 	~CheckShell();					   //!< Destructor, make sure you delete all pointers instanciated using "new"
 	

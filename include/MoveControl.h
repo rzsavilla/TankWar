@@ -10,10 +10,11 @@ protected:
 	bool bTurretOnTarget;		//!< Turret is on target/Ready to fire
 	bool bFastRotation;			//!< Tank will rotate with the turret
 
-	
-private:
 	Position m_DesiredPos;			//!< Tank will move to this position
 	Position m_DesiredTurretPos;	//!< Turret will rotate towards this
+	
+private:
+	
 public:
 
 	bool bRotationOnTarget;			//Tank has rotated towards desired position
@@ -28,6 +29,8 @@ public:
 	Position getTurretDesiredPos();
 
 	void resetMoveControl();		 //!< Sets all movement flags to false;
+
+	bool bIsDodging;
 };
 
 #endif

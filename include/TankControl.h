@@ -54,7 +54,7 @@ public:
 	bool willShellHit(Position pshell, Position pprevShell);
 	void evadeShell();
 	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
-	bool tankReachedDestination(float, float);
+	bool tankReachedDestination();
 	bool isMoving = false;; //!< Flag set when tank is moving
 	vector<bool> bSideOfImpact;
 	
@@ -93,7 +93,7 @@ public:
 
 	void score(int thisScore, int enemyScore);		//!< Notifies tank of current Score
 
-	void decisionTree(); //!< called to updated the action the tank should be taking
+	
 };
 
 #endif

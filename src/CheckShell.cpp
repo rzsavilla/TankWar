@@ -40,6 +40,7 @@ Evade_Action::Evade_Action(TankControl *ptr_tank) {
 
 /////////////Run Nodes/////////////////////////
 bool ShellSpotted_Condition::run() {
+	
 	if (tank->spottedShell()) {
 		///std::cout << "Shell Spotted\n";
 		return true;
@@ -54,11 +55,12 @@ bool ShellIntersect_Condition::run() {
 	
 	if (tank->willShellHit(tank->shellCurrPos, tank->shellPrevPos))
 	{
-		//std::cout << " Will hit\n";
+		std::cout << " Will hit\n";
 		return true;
 		
 	}
 	//std::cout << " wont hit\n";
+	tank->bIsDodging = false;
 	return false;
 	
 }
@@ -66,7 +68,7 @@ bool ShellIntersect_Condition::run() {
 bool CanAvoid_Condition::run() {
 	//Returns true if tank is able to evade shell
 	//std::cout << "  Checking if avoidable\n";
-	if (tank->checkShellProximity())
+	if (tank->checkShellProximity() || this->tank->bIsDodging)
 	{
 		//std::cout << "Avoidable\n";
 		return true;
@@ -85,7 +87,14 @@ bool Evade_Action::run() {
 		//Set desired position that moves away from projectile path?
 			//Then apply move
 	//std::cout << "    Evading!!!!\n";
+	cout << "Dodge" << endl;
 	tank->evadeShell();
-
+	if (tank->tankReachedDestination())
+	{
+		tank->bIsDodging = false;
+	}
 	return true;
+	
+
+	
 }
