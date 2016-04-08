@@ -5,6 +5,7 @@ CheckShell::CheckShell(TankControl* ptr_tank){
 	shellIntersect = new ShellIntersect_Condition(ptr_tank);
 	canAvoid = new CanAvoid_Condition(ptr_tank);
 	evade = new Evade_Action(ptr_tank);
+	
 
 	addChild(shellSpotted);
 	addChild(shellIntersect);
@@ -50,14 +51,32 @@ bool ShellSpotted_Condition::run() {
 
 bool ShellIntersect_Condition::run() {
 	//Returns true if shell will collide with tank
-	std::cout << " Checking Shell Intersect\n";
-	return true;
+	
+	if (tank->willShellHit(tank->shellCurrPos, tank->shellPrevPos))
+	{
+		std::cout << " Will hit\n";
+		return true;
+		
+	}
+	return false;
+	
 }
 
 bool CanAvoid_Condition::run() {
 	//Returns true if tank is able to evade shell
 	std::cout << "  Checking if avoidable\n";
-	return true;
+	if (tank->checkShellProximity())
+	{
+		std::cout << "Avoidable\n";
+		return true;
+		
+	}
+	else
+	{
+		std::cout << "Un avoidable\n";
+		return false;
+	}
+	
 }
 
 bool Evade_Action::run() {
@@ -65,5 +84,7 @@ bool Evade_Action::run() {
 		//Set desired position that moves away from projectile path?
 			//Then apply move
 	std::cout << "    Evading!!!!\n";
+	tank->evadeShell();
+
 	return true;
 }

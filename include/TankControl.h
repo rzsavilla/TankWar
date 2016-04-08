@@ -51,10 +51,14 @@ public:
 	// some functions of actions that the tank will need to perform
 	
 	//Note * put this in Calculations class
-	bool willShellHit(Position ptank, Position pshell, Position pprevShell);
+	bool willShellHit(Position pshell, Position pprevShell);
+	void evadeShell();
 	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
 	bool tankReachedDestination(float, float);
 	bool isMoving = false;; //!< Flag set when tank is moving
+	vector<bool> bSideOfImpact;
+	
+
 
 public:
 	TankControl();					//!< Default Contructor

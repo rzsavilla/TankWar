@@ -3,6 +3,11 @@
 TankControl::TankControl()
 {
 	m_iCallCounter = 0;
+	bSideOfImpact.resize(4);
+	bSideOfImpact[0] = false;
+	bSideOfImpact[1] = false;
+	bSideOfImpact[2] = false;
+	bSideOfImpact[3] = false;
 }
 
 void TankControl::m_Update() {
@@ -169,10 +174,14 @@ void TankControl::score(int thisScore, int enemyScore) {
 	//----------Possible to use this as a way to check if shell hits target------------/////////
 }
 
-bool TankControl::willShellHit(Position ptank, Position pshell, Position pprevShell)
+bool TankControl::willShellHit(Position pshell, Position pprevShell)
 {
-	float tankX = ptank.getX();
-	float tankY = ptank.getY();
+	bSideOfImpact[0] = false; // top
+	bSideOfImpact[1] = false; // right
+	bSideOfImpact[2] = false; // bottom
+	bSideOfImpact[3] = false; // left
+
+	//get positions of objects
 
 	float pshellX = pshell.getX();
 	float pshellY = pshell.getY();
@@ -180,31 +189,151 @@ bool TankControl::willShellHit(Position ptank, Position pshell, Position pprevSh
 	float pprevShellX = pprevShell.getX();
 	float pprevShellY = pprevShell.getY();
 
-	myVector tank(tankX,tankY);
-	myVector shell(pshellX,pshellY);
-	myVector prevShell(pprevShellX,pprevShellY);
+	myVector shell(pshellX, pshellY);
+	myVector prevShell(pprevShellX, pprevShellY);
 
-	//find the distance from the shell to the tank
-	myVector dist = shell.subtract(tank);
+	//find corrds of tank bounding box
+	myVector topLeft(bb.getX1(), bb.getY1());
+	myVector topRight(bb.getX2(), bb.getY1());
+	myVector bottomLeft(bb.getX1(), bb.getY2());
+	myVector bottomRight(bb.getX2(), bb.getY2());
 
-	//find the path of the shell
-	myVector shellPath = shell.subtract(prevShell);
+	bool bShellIsGoingVertical = false;
 
-	// find how long it will take the shell to reach the tank
-	float time = dist.magnitude(dist)/3;
+	// find equation of the shell
+	// y = mx + c
+	// find the gradient
+	myVector changeInXY(shell.i() - prevShell.i(), shell.j() - prevShell.j());
 
-	//move the shell to where it would be at that time 
-	shellPath = myVector(shell.i()*time,shell.j()*time);
-
-	//check wheather the shell is colliding a this new position
-	FloatRect shellRect(shellPath.i(),shellPath.j(),6.0f,12.0f);
-	FloatRect tankRect(tank.i(),tank.j(),200.0f,200.0f);
-
-	if(shellRect.intersects(tankRect))
+	if (changeInXY.i() == 0) // make sure no divide by zero error
 	{
-		return true; // will hit
+		if (shell.i() > topLeft.i() && shell.i() < topRight.i()) // shell going vcetical
+		{
+			return true; // will hit
+		}
+
 	}
+	else
+	{
+		float shellGradient = changeInXY.j() / changeInXY.i();
+		//find y intercept
+		float shellC = shell.j() / (shellGradient*shell.i());
+		// shell.j() = shellGradient * shell.i() + shellC
+		// general equation y = shellGradient * X + shellC
+
+
+
+		// if going horizontal
+		if (shellGradient == 0 && (shell.j() >= topLeft.j() && shell.j() <= bottomLeft.j()))
+		{
+			return true; // will hit
+		}
+		else if (shellGradient == 0)
+		{
+			return false; // wont hit
+		}
+
+		//equation for tank boundry
+		float tankC;
+
+		// find lines from each corner of tank and check against shell equation ----------------------------------------
+		// use which side it hides to decide how to dodge
+
+		//top left to top right
+		// general equation y = 0 * X + tankC
+		tankC = topLeft.j();
+		//compare equations
+		// y = tankC
+		// y = shellGradient * X + shellC
+		// X = (y/shellGradient) - shellC
+		float x = (tankC / shellGradient) - shellC;
+		if (x > topLeft.i() && x < topRight.i())
+		{
+			bSideOfImpact[0] = true;
+			return true; // will hit
+
+		}
+
+		//top right to bottom right
+		// general equation x = bottomRight.i()
+
+		//compare equations
+		// x = bottomRight.i()
+		// y = shellGradient * X + shellC
+		// y = shellGradient * bottomRight.i() + shellC
+		float y = bottomRight.i() * shellGradient + shellC;
+		if (y > topRight.j() && x < bottomRight.j())
+		{
+			bSideOfImpact[1] = true;
+			return true; // will hit
+
+		}
+
+		//bottom right to bottom left
+		// general equation y = 0 * X + tankC
+		tankC = bottomLeft.j();
+		//compare equations
+		// y = tankC
+		// y = shellGradient * X + shellC
+		// X = (y/shellGradient) - shellC
+		x = (tankC / shellGradient) - shellC;
+		if (x > bottomLeft.i() && x < bottomRight.i())
+		{
+			bSideOfImpact[2] = true;
+			return true; // will hit
+
+		}
+
+
+		//bottom left to top left
+		// general equation x = bottomLeft.i()
+
+		//compare equations
+		// x = bottomLeft.i()
+		// y = shellGradient * X + shellC
+		// y = shellGradient * bottomRight.i() + shellC
+		 y = bottomLeft.i() * shellGradient + shellC;
+		if (y > topLeft.j() && x < bottomLeft.j())
+		{
+			bSideOfImpact[3] = true;
+			return true; // will hit
+
+		}
+
+	}
+
 	return false; // wont hit
+}
+
+void TankControl::evadeShell()
+{
+	//find the centre of the tank
+	float x = pos.getX();
+	float y = pos.getY();
+	myVector centreOfTank(x, y);
+	myVector despiredPos;
+
+	if (bSideOfImpact[0] == true) // dodge to the right
+	{
+		despiredPos = myVector(centreOfTank.i()+300,centreOfTank.j());
+		setDesiredPosition(despiredPos.i(), despiredPos.j());
+	}
+	if (bSideOfImpact[1] == true)// dodge downards
+	{
+		despiredPos = myVector(centreOfTank.i(), centreOfTank.j() + 300);
+		setDesiredPosition(despiredPos.i(), despiredPos.j());
+	}
+	if (bSideOfImpact[2] == true)// dodge to the left
+	{
+		despiredPos = myVector(centreOfTank.i() - 300, centreOfTank.j());
+		setDesiredPosition(despiredPos.i(), despiredPos.j());
+	}
+	if (bSideOfImpact[3] == true)// dodge uppwards
+	{
+		despiredPos = myVector(centreOfTank.i(), centreOfTank.j() - 300);
+		setDesiredPosition(despiredPos.i(), despiredPos.j());
+	}
+	setDesiredPosition(0, 0);
 }
 
 bool TankControl::checkShellProximity()
