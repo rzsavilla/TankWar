@@ -209,7 +209,17 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 	{
 		if (shell.i() > topLeft.i() && shell.i() < topRight.i()) // shell going vcetical
 		{
-			return true; // will hit
+			if (shell.j() < topLeft.j())
+			{
+				bSideOfImpact[0] = true;
+				return true; // will hit
+			}
+			if (shell.j() > bottomLeft.j())
+			{
+				bSideOfImpact[2] = true;
+				return true; // will hit
+			}
+			
 		}
 
 	}
@@ -310,14 +320,33 @@ void TankControl::evadeShell()
 	//find the centre of the tank
 	float x = pos.getX();
 	float y = pos.getY();
+	float orientation = this->pos.getTh();
 	myVector centreOfTank(x, y);
 	myVector despiredPos;
 
-	if (bSideOfImpact[0] == true) // dodge to the right
+	cout << "top " <<bSideOfImpact[0] << endl;
+	cout << "right " << bSideOfImpact[1] << endl;
+	cout << "down " << bSideOfImpact[2] << endl;
+	cout << "left " << bSideOfImpact[3] << endl;
+
+
+	if (bSideOfImpact[1] == true) // shell is coming down at tank
 	{
-		despiredPos = myVector(centreOfTank.i()+300,centreOfTank.j());
-		setDesiredPosition(despiredPos.i(), despiredPos.j());
+		cout << "Go" << endl;
+		if ((orientation >= 0 & orientation <= 45)|| orientation < 360 && orientation >315) // dodge to the right
+		{
+			goForward();
+			//cout << "Go" << endl;
+			return;
+		}
+		if ((orientation >= 180 & orientation <= 225) || orientation < 180 && orientation >135) // dodge to the left
+		{
+			goForward();
+			//cout << "Go" << endl;
+			return;
+		}
 	}
+	/*
 	if (bSideOfImpact[1] == true)// dodge downards
 	{
 		despiredPos = myVector(centreOfTank.i(), centreOfTank.j() + 300);
@@ -334,6 +363,7 @@ void TankControl::evadeShell()
 		setDesiredPosition(despiredPos.i(), despiredPos.j());
 	}
 	setDesiredPosition(0, 0);
+	*/
 }
 
 bool TankControl::checkShellProximity()
