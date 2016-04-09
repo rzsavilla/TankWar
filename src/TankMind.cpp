@@ -2,6 +2,7 @@
 
 TankMind::TankMind() {
 	createBehaviour();
+	bIsDodging = false;
 }
 
 TankMind::~TankMind() {

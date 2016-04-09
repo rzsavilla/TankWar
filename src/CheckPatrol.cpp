@@ -30,7 +30,7 @@ Reposition_Action::Reposition_Action(TankControl * ptr_tank) {
 
 bool Reposition_Action::run() {
 	std::cout << "Reposition\n";
-	if (tank->tankReachedDestination(dx, dy)) {
+	if (tank->tankReachedDestination()) {
 		tank->isMoving = false;
 		std::cout << "Reached Position\n";
 	}
