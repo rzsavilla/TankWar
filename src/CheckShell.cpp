@@ -89,7 +89,7 @@ bool Evade_Action::run() {
 	//std::cout << "    Evading!!!!\n";
 	cout << "Dodge" << endl;
 	tank->evadeShell();
-	if (tank->tankReachedDestination())
+	if (tank->reachedDesiredPos())
 	{
 		tank->bIsDodging = false;
 	}

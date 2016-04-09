@@ -11,7 +11,7 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	this->addChild(haveAmmo);
 	this->addChild(predictAim);
 	this->addChild(checkShoot);
-	this->addChild(maintainDistance);
+	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
@@ -27,7 +27,7 @@ MaintainDistance::MaintainDistance(TankControl *ptr_tank) {
 	reposition = new Reposition_Action(ptr_tank);
 
 	this->addChild(enemyTooClose);
-	//	this->addChild(moveAway);
+	// Add check if tank can shoot
 	this->addChild(reposition);
 }
 
@@ -75,12 +75,13 @@ bool EnemyTooClose_Condition::run() {
 	float fDist;
 
 	if (!tank->canFire()) {
-		fDist = distance(tank->enemyCurrPos.getX(), tank->getX(), tank->enemyCurrPos.getY(), tank->getY());
-		std::cout << fDist << std::endl;
-		if (fDist < 150.f) {
-			std::cout << "Move Away\n";
-			return true;
-		}
+		//fDist = getDistance(tank->enemyCurrPos.getX(), tank->getX(), tank->enemyCurrPos.getY(), tank->getY());
+		//std::cout << fDist << std::endl;
+		//if (fDist < 150.f) {
+		//	std::cout << "Move Away\n";
+		//	return true;
+		//}
+		return true;
 	}
 
 	return false;
