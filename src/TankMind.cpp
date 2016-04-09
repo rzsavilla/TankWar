@@ -2,19 +2,22 @@
 
 TankMind::TankMind() {
 	createBehaviour();
+	
 }
 
 TankMind::~TankMind() {
 	delete checkShell;
 	delete checkEnemy;
+	delete checkEnemyBase;
+	delete checkPatrol;
 	delete root;
 }
 
 void TankMind::createBehaviour() {
 	root->addChild(checkShell);
-	//root->addChild(checkEnemy);
-	//root->addChild(checkEnemyBase);
-	//root->addChild(checkPatrol);
+	root->addChild(checkEnemy);
+	root->addChild(checkEnemyBase);
+	root->addChild(checkPatrol);
 }
 
 void TankMind::move() {
@@ -26,10 +29,12 @@ void TankMind::move() {
 		      << bBaseSpotted << " EBase:" << bEnemyBaseSpotted
 		      << " OnTarget:" << bTurretOnTarget << std::endl;
 	*/
+	//Reset tank rotation
+	this->stop();			//Stop tank rotation 
+	this->stopTurret();		//Stop turret rotation
 
-	if (root->run()) {
-
-	}
+	root->run();			// run through the behaviour tree
 
 	m_Update();
+	//implementMove();
 }

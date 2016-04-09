@@ -2,7 +2,6 @@
 
 CheckPatrol::CheckPatrol(TankControl *ptr_tank) {
 	reposition = new Reposition_Action(ptr_tank);
-	float dx, dy;
 	addChild(reposition);
 }
 
@@ -24,22 +23,26 @@ BasesNotFound_Condition::BasesNotFound_Condition(TankControl * ptr_tank) {
 
 Reposition_Action::Reposition_Action(TankControl * ptr_tank) {
 	this->tank = ptr_tank;
-	dx = 0.f;
-	dy = 0.f;
+	fX = 0.0f;
+	fY = 0.0f;
 }
 
 bool Reposition_Action::run() {
-	if (tank->tankReachedDestination(dx, dy)) {
-		tank->isMoving = false;
+
+	if (tank->reachedDesiredPos() || tank->hasCollided()) {			// When tank should reposition
+		tank->bIsMoving = false;
+		if (tank->hasCollided()) { tank->goBackward(); }
 		std::cout << "Reached Position\n";
 	}
-	if (!tank->isMoving) {
-		dx = (float)(rand() % 750 + 10);
-		dy = (float)(rand() % 540 + 10);
+
+	if (!tank->bIsMoving) {						//Reposition tank
+		fX = (float)(rand() % 750 + 10);		//Generate random position
+		fY = (float)(rand() % 540 + 10);
 		std::cout << "Repositioning\n";
-		tank->isMoving = true;
-		}
-	tank->setDesiredPosition(dx, dy);
+		tank->bIsMoving = true;					//Tank has is now moving
+	}
+	tank->setDesiredPosition(fX, fY);
+	
 	return true;
 }
 

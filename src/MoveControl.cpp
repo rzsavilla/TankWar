@@ -22,17 +22,16 @@ void MoveControl::setTurretDesiredPosition(float x, float y, bool fastRotation) 
 	bTurretRotationOnTarget = false;
 }
 
-Position MoveControl::getDesiredPos() {
-	return m_DesiredPos;
-}
-Position MoveControl::getTurretDesiredPos() {
-	return m_DesiredTurretPos;
-}
+Position MoveControl::getDesiredPos() { return m_DesiredPos; }
+Position MoveControl::getTurretDesiredPos() { return m_DesiredTurretPos; }
+
+bool MoveControl::hasCollided() { return bHasCollided; }
 
 void MoveControl::resetMoveControl() {
 	bHasDesiredPos = false;
 	bHasTurretDesiredPos = false;
 	bTurretOnTarget = false;
 	bFastRotation = false;
+	bHasCollided = false;
 }
 

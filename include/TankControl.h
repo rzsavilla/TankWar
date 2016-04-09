@@ -21,8 +21,8 @@ using namespace sf;
 
 class TankControl : public  AITank, public MoveControl, public Vision {
 private:
-	const float fRotationAccuracy = 5.0f;
-	const float fTurretRotationAccuracy = 5.0f;
+	const float fRotationAccuracy = 1.0f;
+	const float fTurretRotationAccuracy = 1.0f;
 protected:
 	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
 	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
@@ -53,15 +53,12 @@ public:
 	//Note * put this in Calculations class
 	bool willShellHit(Position pshell, Position pprevShell);
 	void evadeShell();
-	bool checkShellProximity(); //!< check to see if the shell is to close to avoid
-	bool tankReachedDestination(float, float);
-	bool isMoving = false;; //!< Flag set when tank is moving
+	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
+	bool reachedDesiredPos();
 	vector<bool> bSideOfImpact;
-	
-
 
 public:
-	TankControl();					//!< Default Contructor
+	TankControl();	//!< Default Contructor
 
 public:
 	//////////////////Virtual functions inherited from AI tank are defined by this class///////////////
@@ -79,6 +76,7 @@ public:
 		\param Position of the enemy tank
 	*/
 	void markTarget(Position p);
+
 	/*! Called by the game object when one of you own buildings comes within the tanks visible range
 		\param Position of the home building
 	*/
@@ -89,11 +87,9 @@ public:
 	*/
 	void markShell(Position p);
 
-	bool isFiring(); //!< Called by the game object each frame.  When this function returns true (and ammo is availbe and loaded) the tank will fire a shell
+	bool isFiring();								//!< Called by the game object each frame.  When this function returns true (and ammo is availbe and loaded) the tank will fire a shell
 
 	void score(int thisScore, int enemyScore);		//!< Notifies tank of current Score
-
-	void decisionTree(); //!< called to updated the action the tank should be taking
 };
 
 #endif

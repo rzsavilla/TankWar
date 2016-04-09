@@ -12,7 +12,8 @@ public:
 
 class Reposition_Action : public Action {
 private:
-	float dx, dy;
+	float fX;
+	float fY;
 public:
 	Reposition_Action(TankControl* ptr_tank);
 	virtual bool run() override;
