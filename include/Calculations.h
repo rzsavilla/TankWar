@@ -53,4 +53,19 @@ static bool findMatch(Position pos, std::vector<Position> vPositions) {
 	return false;		//No match has been found
 }
 
+/*static float distance(Position pos1, Position pos2)
+{
+float fDist;
+fDist = sqrt((pow((pos2.getX() * pos1.getX()), 2.0)) + (pow((pos2.getY() * pos1.getY()), 2.0)));
+
+return fDist;
+} */
+
+static float distance(float X2, float X1, float Y2, float Y1)
+{
+	float fDist;
+	fDist = sqrt((pow((X2 - X1), 2.0)) + (pow((Y2 - Y1), 2.0)));
+
+	return fDist;
+}
 #endif
