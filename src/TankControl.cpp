@@ -8,13 +8,11 @@ TankControl::TankControl()
 	bSideOfImpact[1] = false;
 	bSideOfImpact[2] = false;
 	bSideOfImpact[3] = false;
+
+	bIsDodging = false;
 }
 
 void TankControl::m_Update() {
-	//Movement
-	stop();
-	stopTurret();
-
 	if (bHasTurretDesiredPos) {
 		if (!m_rotateTurretTowards(getTurretDesiredPos())) {
 			//Target rotation not yet achieved;
@@ -96,11 +94,11 @@ bool TankControl::m_rotateTurretTowards(Position targetPosition) {
 void TankControl::reset() {
 	resetVision();
 	resetMoveControl();
-	isMoving = false;
+	bIsMoving = false;
 }
 
 void TankControl::collided() {
-
+	bHasCollided = true;
 }
 
 void TankControl::markTarget(Position p) {
@@ -406,11 +404,12 @@ bool TankControl::checkShellProximity()
 	return false; // will hit
 }
 
-bool TankControl::tankReachedDestination() {
-	float tankX = getX();
-	float tankY = getY();
+bool TankControl::reachedDesiredPos() {
+	float fDist = fabs(getDistance(this->pos, this->getDesiredPos()));		// Get Absolute distance
 
-	if ((tankX > m_DesiredPos.getX() && tankX < m_DesiredPos.getX() + 200.f) && (tankY > m_DesiredPos.getY() && tankY < m_DesiredPos.getY() + 200.f))
-	return true;
-	else return false;
+	std::cout << fDist << std::endl;
+
+	if (fDist < 1.0f) { return true; }	//Tank has reached position
+	else { return false;  }				//Tank has not reached reached position
+
 }
