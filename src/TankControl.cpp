@@ -10,6 +10,11 @@ TankControl::TankControl()
 	bSideOfImpact[3] = false;
 
 	bIsDodging = false;
+
+	shellPrevPos = Position(0.0f, 0.0f);
+	shellCurrPos = Position(0.0f, 0.0f);
+	enemyPrevPos = Position(0.0f, 0.0f);
+	enemyCurrPos = Position(0.0f, 0.0f);
 }
 
 void TankControl::m_Update() {
@@ -29,6 +34,8 @@ void TankControl::m_Update() {
 		}
 		else {
 			bTurretOnTarget = true;
+			bHasTurretDesiredPos = false;
+			bFastRotation = false;
 		}
 	}
 
@@ -123,8 +130,10 @@ void TankControl::markEnemy(Position p) {
 	if (enemyPrevPos.getX() != enemyCurrPos.getX()
 		&& enemyPrevPos.getY() != enemyCurrPos.getY()) {
 		bEnemyMoving = true;
+		//std::cout << "Enemy Moving\n";
 	}
 	else {
+		//std::cout << "Enemy Not Moving\n";
 		bEnemyMoving = false;
 	}
 	bEnemySpotted = true;
@@ -159,8 +168,8 @@ void TankControl::markShell(Position p) {
 }
 
 bool TankControl::isFiring() {
-	if (bTurretOnTarget) {
-		bTurretOnTarget = false;
+	if (bShoot) {
+		bShoot = false;
 		return true;					// Tank fires projectile
 	}
 	return false;
@@ -407,9 +416,39 @@ bool TankControl::checkShellProximity()
 bool TankControl::reachedDesiredPos() {
 	float fDist = fabs(getDistance(this->pos, this->getDesiredPos()));		// Get Absolute distance
 
-	std::cout << fDist << std::endl;
+	//std::cout << fDist << std::endl;
 
 	if (fDist < 1.0f) { return true; }	//Tank has reached position
 	else { return false;  }				//Tank has not reached reached position
 
+}
+
+Position TankControl::getEnemyPredictedPos() {
+	std::cout << "Aim Predict\n";
+	float fShellSpeed = 3.0f;
+	float fMoveSpeed = 1.0f;
+	//Calculate Enemy Tank velocity
+	myVector vel = myVector(this->enemyCurrPos.getX() - this->enemyPrevPos.getY(), this->enemyCurrPos.getY() - this->enemyPrevPos.getY());
+	vel = vel.unitVector();
+	vel = myVector(vel.i(), vel.j());		//Enemy Tank velocity
+
+	//Position difference between this and enemy tank 
+	float fDiffX = this->enemyCurrPos.getX() - this->getX();
+	float fDiffY = this->enemyCurrPos.getY() - this->getY();
+	float fMagnitude = sqrt(fDiffX * fDiffX + fDiffY * fDiffY);
+
+	//Calculate adjustment angle
+	float fAngle;
+	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
+	//Convert angle to vector position/position adjustment
+	float x = (cos(fAngle) * (fMagnitude / 2));
+	float y = (-sin(fAngle) * (fMagnitude / 2));
+
+	//Add Adjustment position to enemy current position
+	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());
+	//std::cout << "ANGLE: " << fAngle << std::endl;
+	std::cout << "Enemy: " << this->enemyCurrPos.getX() << " " << this->enemyPrevPos.getX() << std::endl;
+	std::cout << "Predicted: " << predictedPos.getX() << " " << predictedPos.getY() << std::endl;
+
+	return predictedPos;
 }
