@@ -5,9 +5,7 @@
 #include "Calculations.h"
 
 class MoveControl {
-private:
-
-protected:
+public:
 	bool bHasDesiredPos;		//!< Tank will move towards desired position
 	bool bHasTurretDesiredPos;  //!< Turret will rotate towards desired position
 	bool bTurretOnTarget;		//!< Turret is on target/Ready to fire
@@ -22,6 +20,9 @@ public:
 
 	bool bIsDodging;				//!< Tank is currently attempting to dodge bullet
 	bool bIsMoving;					//!< Tank currently has a position to move towards
+
+	//Do not forget to reset bShoot after shooting
+	bool bShoot;					//!< Tank will shoot if this is true 
 public:
 	void setDesiredPosition(Position newPos);		 //!< Will set a position
 	void setDesiredPosition(float x, float y);		 //!< Will set a position
@@ -34,8 +35,6 @@ public:
 	Position getTurretDesiredPos();	//!< Return turrets target position to rotate towards
 
 	void resetMoveControl();		//!< Sets all movement flags to false;
-
-	
 };
 
 #endif
