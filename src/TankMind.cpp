@@ -14,6 +14,12 @@ TankMind::~TankMind() {
 }
 
 void TankMind::createBehaviour() {
+	root = new BehaviourTree::Selector;
+	checkShell = new CheckShell(this);
+	checkEnemy = new CheckEnemy(this);
+	checkEnemyBase = new CheckEnemyBase(this);
+	checkPatrol = new CheckPatrol(this);
+
 	root->addChild(checkShell);
 	root->addChild(checkEnemy);
 	root->addChild(checkEnemyBase);

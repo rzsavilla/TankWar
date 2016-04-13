@@ -3,20 +3,17 @@
 CheckShoot::CheckShoot(TankControl *ptr_tank) {
 	haveAmmo = new HaveAmmo_Condition(ptr_tank);
 	hasLOS = new LOS_Condition(ptr_tank);
-	aimTurret = new Aim_Action(ptr_tank);
 	shoot = new Shoot_Action(ptr_tank);
 
 	//Create branch
-	//this->addChild(haveAmmo);
+	this->addChild(haveAmmo);
 	this->addChild(hasLOS);
-	this->addChild(aimTurret);
 	this->addChild(shoot);
 }
 
 CheckShoot::~CheckShoot() {
 	//Delete nodes instantiated with new
 	delete haveAmmo;
-	delete aimTurret;
 	delete hasLOS;
 	delete shoot;
 }
@@ -38,7 +35,7 @@ Shoot_Action::Shoot_Action(TankControl *ptr_tank) {
 }
 
 bool HaveAmmo_Condition::run() {
-	if (tank->getNumberOfShells() >0) {
+	if (tank->getNumberOfShells() > 0) {
 		std::cout << "Have Ammo\n";
 		return true;
 	}
@@ -49,15 +46,26 @@ bool HaveAmmo_Condition::run() {
 
 bool LOS_Condition::run() {
 	std::cout << " Checking LOS\n";
-	return true;
+	if (tank->bTurretOnTarget) {
+		return true;					//Turret is aimed
+	}
+	else {
+		return false;
+	}
 }
 
 bool Aim_Action::run() {
-	std::cout << "  Aiming\n";
-	return true;
+	if (tank->getNumberOfShells() > 0) {
+		std::cout << "Have Ammo\n";
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 bool Shoot_Action::run() {
-	std::cout << "   Shoot!!!!!\n";
+	std::cout << "   Shoot!!!!!\t" << tank->bHasTurretDesiredPos << std::endl;
+	tank->bShoot = true;					//Tank will fire projectile
 	return true;
 }
