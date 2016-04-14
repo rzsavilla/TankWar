@@ -131,12 +131,12 @@ void TankControl::collided() {
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
 	if (vEnemyBasePos.size() <= 0) {
-		vEnemyBasePos.push_back(p);
+		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vEnemyBasePos)) {
-			vEnemyBasePos.push_back(p);
+			vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -164,16 +164,16 @@ void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
 	if (vBasePos.size() <= 0) {
-		vBasePos.push_back(p);
+		vBasePos.push_back(std::pair<bool, Position>(true, p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vBasePos)) {		//Iterate through bases spotted and check if they have already been found
-			vBasePos.push_back(p);
+			vBasePos.push_back(std::pair<bool, Position>(true, p));
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	//bBaseSpotted = true;		//Tank can see base
+	bBaseSpotted = true;		//Tank can see base
 }
 
 void TankControl::markShell(Position p) {
@@ -235,7 +235,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 	if (changeInXY.i() == 0) // make sure no divide by zero error
 	{
-		if (shell.i() > topLeft.i() - 10 && shell.i() < topRight.i() + 10) // shell going vcetical
+		if (shell.i() > topLeft.i() - 25 && shell.i() < topRight.i() + 25) // shell going vcetical
 		{
 			cout << "vertical" << endl;
 			if (shell.j() < topLeft.j())
@@ -258,7 +258,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		float shellC = shell.j() - (shellGradient*shell.i());
 		
 		// if going horizontal 
-		if (shellGradient == 0 && (shell.j() >= topLeft.j() - 10 && shell.j() <= bottomLeft.j()+ 10))
+		if (shellGradient == 0 && (shell.j() >= topLeft.j() - 25 && shell.j() <= bottomLeft.j()+ 25))
 		{
 			cout << "horizontal" << endl;
 			if (shell.i() < topLeft.i())
@@ -291,7 +291,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// find x
 		x = (y - c) / m;
 		
-		if (x >= topLeft.i() - 10 && x <= topRight.i()+10) // if x at this value for y intersects
+		if (x >= topLeft.i() - 25 && x <= topRight.i()+25) // if x at this value for y intersects
 		{
 			return true; // will hit
 		}
@@ -303,7 +303,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		c = shellC;
 		// find y
 		y = x*m + c;
-		if (y >= topRight.j() - 10 && y <= bottomRight.j() + 10) // if y at this value for x intersects
+		if (y >= topRight.j() - 25 && y <= bottomRight.j() + 25) // if y at this value for x intersects
 		{
 			return true; // will hit
 
@@ -317,7 +317,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// find x
 		x = (y - c) / m;
 
-		if (x >= bottomLeft.i() -10 && x <= bottomRight.i() + 10)
+		if (x >= bottomLeft.i() -25 && x <= bottomRight.i() + 25)
 		{
 			return true; // will hit
 
@@ -331,7 +331,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		c = shellC;
 		// find y
 		y = x*m + c;
-		if (y >= topLeft.j() - 10 && y <= bottomLeft.j() + 10)
+		if (y >= topLeft.j() - 25 && y <= bottomLeft.j() + 25)
 		{
 			return true; // will hit
 
@@ -339,6 +339,23 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 	}
 	return false; // wont hit
+}
+
+bool TankControl::willShellHitFreindlyBuilding()
+{
+	if (bEnemySpotted && bBaseSpotted)// both are in vision
+	{
+		
+		myVector enemyTank(enemyCurrPos.getX(),enemyCurrPos.getY());
+		myVector freindlyTank(pos.getX(), pos.getY());
+		myVector Building;
+		myVector dist;
+	
+
+		
+	}
+	cout << "false" << endl;
+	return false;
 }
 
 void TankControl::evadeShell()

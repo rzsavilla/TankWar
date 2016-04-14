@@ -68,6 +68,7 @@ bool PredictAim_Action::run() {
 		std::cout << "Aiming\n";
 		//Enemy Tank not moving
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
+		tank->bFastRotation = true;
 	}
 	return true;
 }

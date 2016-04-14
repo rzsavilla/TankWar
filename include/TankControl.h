@@ -54,6 +54,7 @@ public:
 	
 	//Note * put this in Calculations class
 	bool willShellHit(Position pshell, Position pprevShell);
+	bool willShellHitFreindlyBuilding();
 	void evadeShell();
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
