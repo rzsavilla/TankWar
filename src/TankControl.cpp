@@ -173,7 +173,7 @@ void TankControl::markBase(Position p) {
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	//bBaseSpotted = true;		//Tank can see base
+	bBaseSpotted = true;		//Tank can see base
 }
 
 void TankControl::markShell(Position p) {
@@ -345,36 +345,16 @@ bool TankControl::willShellHitFreindlyBuilding()
 {
 	if (bEnemySpotted && bBaseSpotted)// both are in vision
 	{
-		float fMin = 9999999999999;
-		myVector enemyTank(enemyCurrPos.getX()+100,enemyCurrPos.getY()+100);
-		myVector freindlyTank(pos.getX()+100, pos.getY()+100);
+		
+		myVector enemyTank(enemyCurrPos.getX(),enemyCurrPos.getY());
+		myVector freindlyTank(pos.getX(), pos.getY());
 		myVector Building;
 		myVector dist;
-		float result;
+	
 
-		//find nearest freindly building
-		for (int i = 0; i < 6; i++)
-		{
-			Building = myVector(vBasePos[i].second.getX() + 10, vBasePos[i].second.getY() + 10 && vBasePos[i].first == true);
-			//subtract vectors
-			dist = Building.subtract(freindlyTank);
-			result = dist.magnitude(dist);
-			if (result < fMin)
-			{
-				fMin = result;
-			}
-		}
-
-		//closest builing is now fMin away
-		// find dist from enemy tank to freindly tank
-		myVector tankDist(enemyTank.subtract(freindlyTank));
-		if (tankDist.magnitude(tankDist) < fMin)
-		{
-			// closer to building than tank
-			return true;
-		}
-
+		
 	}
+	cout << "false" << endl;
 	return false;
 }
 
