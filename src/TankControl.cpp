@@ -131,12 +131,12 @@ void TankControl::collided() {
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
 	if (vEnemyBasePos.size() <= 0) {
-		vEnemyBasePos.push_back(p);
+		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vEnemyBasePos)) {
-			vEnemyBasePos.push_back(p);
+			vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -164,12 +164,12 @@ void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
 	if (vBasePos.size() <= 0) {
-		vBasePos.push_back(p);
+		vBasePos.push_back(std::pair<bool, Position>(true, p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vBasePos)) {		//Iterate through bases spotted and check if they have already been found
-			vBasePos.push_back(p);
+			vBasePos.push_back(std::pair<bool, Position>(true, p));
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -355,7 +355,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 		//find nearest freindly building
 		for (int i = 0; i < 6; i++)
 		{
-			Building = myVector(vBasePos[i].getX()+10, vBasePos[i].getY()+10);
+			Building = myVector(vBasePos[i].second.getX() + 10, vBasePos[i].second.getY() + 10 && vBasePos[i].first == true);
 			//subtract vectors
 			dist = Building.subtract(freindlyTank);
 			result = dist.magnitude(dist);
