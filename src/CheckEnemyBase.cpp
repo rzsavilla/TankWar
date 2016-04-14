@@ -43,6 +43,6 @@ bool TargetBase_Action::run() {
 	//std::cout << "Size: " <<tank->vEnemyBasePos.size() << std::endl;
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
-	if(tank->bTurretOnTarget)tank->fireShell();
+	//if(tank->bTurretOnTarget)tank->fireShell();
 	return true;
 }
