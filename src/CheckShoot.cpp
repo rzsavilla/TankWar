@@ -36,10 +36,11 @@ Shoot_Action::Shoot_Action(TankControl *ptr_tank) {
 
 bool HaveAmmo_Condition::run() {
 	if (tank->getNumberOfShells() > 0) {
-		//std::cout << "Have Ammo\n";
+		std::cout << "Have Ammo\n";
 		return true;
 	}
 	else {
+		std::cout << "No Ammo\n";
 		return false;
 	}
 }
