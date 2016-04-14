@@ -10,6 +10,7 @@ TankMind::~TankMind() {
 	delete checkEnemy;
 	delete checkEnemyBase;
 	delete checkPatrol;
+	delete checkAttack;
 	delete root;
 }
 
@@ -19,10 +20,10 @@ void TankMind::createBehaviour() {
 	checkEnemy = new CheckEnemy(this);
 	checkEnemyBase = new CheckEnemyBase(this);
 	checkPatrol = new CheckPatrol(this);
+	checkAttack = new CheckAttack(this);
 
 	root->addChild(checkShell);
-	root->addChild(checkEnemy);
-	root->addChild(checkEnemyBase);
+	root->addChild(checkAttack);
 	root->addChild(checkPatrol);
 }
 

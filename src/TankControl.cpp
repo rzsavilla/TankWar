@@ -606,7 +606,7 @@ void TankControl::evadeShell()
 	else
 	{
 		//work out which direction is best to drive
-		if(orientation < maxAngle-180 && orientation > minAngle-180)
+		if (angleDiff - orientation > 180 )
 		{
 			goForward();
 		}
