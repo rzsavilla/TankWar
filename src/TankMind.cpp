@@ -23,7 +23,9 @@ void TankMind::createBehaviour() {
 	checkAttack = new CheckAttack(this);
 
 	root->addChild(checkShell);
-	root->addChild(checkAttack);
+	root->addChild(checkEnemy);
+	root->addChild(checkEnemyBase);
+	//root->addChild(checkAttack);
 	root->addChild(checkPatrol);
 }
 

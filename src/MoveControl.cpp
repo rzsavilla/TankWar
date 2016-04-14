@@ -30,9 +30,9 @@ bool MoveControl::hasCollided() { return bHasCollided; }
 
 void MoveControl::resetMoveControl() {
 	bHasDesiredPos = false;
-	//bHasTurretDesiredPos = false;
-	//bTurretOnTarget = false;
-	//bFastRotation = false;
+	bHasTurretDesiredPos = false;
+	bTurretOnTarget = false;
+	bFastRotation = false;
 	bHasCollided = false;
 }
 
