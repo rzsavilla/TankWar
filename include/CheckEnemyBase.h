@@ -22,10 +22,12 @@ private:
 	Winning_Condition *isWinning;
 	HaveAmmo_Condition *haveAmmo;
 	TargetBase_Action *targetBase;
+	CheckShoot *checkShoot;
 public:
 	CheckEnemyBase(TankControl *ptr);
 	~CheckEnemyBase();
 };
+
 
 
 #endif
