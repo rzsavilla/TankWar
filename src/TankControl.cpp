@@ -130,18 +130,17 @@ void TankControl::collided() {
 
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
-		//First check
 	if (vEnemyBasePos.size() <= 0) {
-		vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
+		vEnemyBasePos.push_back(p);
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
-		if (!findMatch(p,vEnemyBasePos)) {
-			vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
+		if (!findMatch(p, vEnemyBasePos)) {
+			vEnemyBasePos.push_back(p);
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	bEnemyBaseSpotted = true;		//Enemy can see an enemy base
+	//bEnemyBaseSpotted = true;		//Enemy can see an enemy base
 }
 
 void TankControl::markEnemy(Position p) {
@@ -165,12 +164,12 @@ void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
 	if (vBasePos.size() <= 0) {
-		vBasePos.push_back(std::pair<bool, Position>(true,p));
+		vBasePos.push_back(p);
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vBasePos)) {		//Iterate through bases spotted and check if they have already been found
-			//vBasePos.push_back(p);
+			vBasePos.push_back(p);
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -340,6 +339,43 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 	}
 	return false; // wont hit
+}
+
+bool TankControl::willShellHitFreindlyBuilding()
+{
+	if (bEnemySpotted && bBaseSpotted)// both are in vision
+	{
+		float fMin = 9999999999999;
+		myVector enemyTank(enemyCurrPos.getX()+100,enemyCurrPos.getY()+100);
+		myVector freindlyTank(pos.getX()+100, pos.getY()+100);
+		myVector Building;
+		myVector dist;
+		float result;
+
+		//find nearest freindly building
+		for (int i = 0; i < 6; i++)
+		{
+			Building = myVector(vBasePos[i].getX()+10, vBasePos[i].getY()+10);
+			//subtract vectors
+			dist = Building.subtract(freindlyTank);
+			result = dist.magnitude(dist);
+			if (result < fMin)
+			{
+				fMin = result;
+			}
+		}
+
+		//closest builing is now fMin away
+		// find dist from enemy tank to freindly tank
+		myVector tankDist(enemyTank.subtract(freindlyTank));
+		if (tankDist.magnitude(tankDist) < fMin)
+		{
+			// closer to building than tank
+			return true;
+		}
+
+	}
+	return false;
 }
 
 void TankControl::evadeShell()
