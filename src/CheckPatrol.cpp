@@ -46,12 +46,6 @@ bool Reposition_Action::run() {
 
 		return false;
 	}
-	if (bOneTime == true)
-	{
-		if (tank->spinTank()){  }
-		else{ bOneTime = false; }
-
-	}
 	else
 	{
 
