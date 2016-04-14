@@ -130,6 +130,8 @@ void TankControl::collided() {
 
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
+	enemyBasePos = p;
+	std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	if (vEnemyBasePos.size() <= 0) {
 		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
@@ -140,7 +142,7 @@ void TankControl::markTarget(Position p) {
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	//bEnemyBaseSpotted = true;		//Enemy can see an enemy base
+	bEnemyBaseSpotted = true;		//Enemy can see an enemy base
 }
 
 void TankControl::markEnemy(Position p) {
@@ -173,7 +175,7 @@ void TankControl::markBase(Position p) {
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	//bBaseSpotted = true;		//Tank can see base
+	bBaseSpotted = true;		//Tank can see base
 }
 
 void TankControl::markShell(Position p) {
