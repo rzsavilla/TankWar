@@ -12,7 +12,7 @@
 class ShellSpotted_Condition: public Condition {
 public:
 	ShellSpotted_Condition(TankControl *ptr_tank);
-	
+	bool firstSpot = true;
 	virtual bool run() override;
 };
 

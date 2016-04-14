@@ -60,8 +60,7 @@ public:
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
 	void patrolTurret();
-	bool spinTank();
-	
+	bool spinTank();	
 
 	//Predictive Aiming
 	const float kfShellSpeed = 3.0f;	//!< Shell movement speed

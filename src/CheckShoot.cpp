@@ -47,7 +47,7 @@ bool HaveAmmo_Condition::run() {
 
 bool LOS_Condition::run() {
 	std::cout << " Checking LOS\n";
-	if (tank->bTurretOnTarget/*&& tank->willShellHitFreindlyBuilding() == false*/) {
+	if (tank->bTurretOnTarget && tank->willShellHitFreindlyBuilding() == false) {
 		
 		return true;					//Turret is aimed
 	}
