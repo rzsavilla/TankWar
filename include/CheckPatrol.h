@@ -14,6 +14,7 @@ class Reposition_Action : public Action {
 private:
 	float fX;
 	float fY;
+	int partOfFieldNewDest; // Integer representing which part of the field the new random position is in
 public:
 	Reposition_Action(TankControl* ptr_tank);
 	

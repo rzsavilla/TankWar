@@ -25,6 +25,7 @@ Reposition_Action::Reposition_Action(TankControl * ptr_tank) {
 	this->tank = ptr_tank;
 	fX = 0.0f;
 	fY = 0.0f;
+	partOfFieldNewDest = 0;
 }
 
 bool Reposition_Action::run() {
@@ -48,10 +49,44 @@ bool Reposition_Action::run() {
 	}
 
 	if (!tank->bIsMoving) {						//Reposition tank
-		fX = (float)(rand() % 750 + 10);		//Generate random position
-		fY = (float)(rand() % 540 + 10);
+
+		//Find out which part of the field we're in
+		if (tank->getX() < tank->middleX) {
+			if (tank->getY() < tank->middleY)
+				tank->partOfField = 1; // Top Left
+			else tank->partOfField = 3; // Bottom Right
+		}
+		else {
+			if (tank->getY() < tank->middleY)
+				tank->partOfField = 2; // Top Right
+			else
+				tank->partOfField = 4; // Bottom Right
+		}
+		std::cout << tank->partOfField;
+		while (!tank->bFoundNewPatrolDestination) {
+				fX = (float)(rand() % 600 + 100);		//Generate random position
+				fY = (float)(rand() % 400 + 100);
+
+				if (fX < tank->middleX) {
+					if (fY < tank->middleY)
+						partOfFieldNewDest = 1; // Top Left
+					else partOfFieldNewDest = 3; // Bottom Right
+				}
+				else {
+					if (fX < tank->middleY)
+						partOfFieldNewDest = 2; // Top Right
+					else
+						partOfFieldNewDest = 4; // Bottom Right
+				}
+
+				if (tank->partOfField == partOfFieldNewDest)
+					tank->bFoundNewPatrolDestination = false;
+				else
+					tank->bFoundNewPatrolDestination = true;
+		}
 		std::cout << "Repositioning\n";
 		tank->bIsMoving = true;					//Tank has is now moving
+		tank->bFoundNewPatrolDestination = false;
 	}
 	tank->patrolTurret();
 	tank->setDesiredPosition(fX, fY);

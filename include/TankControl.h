@@ -26,6 +26,13 @@ private:
 	bool swingingTurretLeft;
 	bool swingingTurretRight;
 public:
+	// Field Awareness
+	const float middleX = 400.f;
+	const float middleY = 300.f;
+	int partOfField; // 1 = Top Left, 2 = Top Right, 3 = Bottom Left, 4 = Bottom Right
+	bool bFoundNewPatrolDestination = false;
+
+public:
 	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
 	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
 public: //Multiple access modifiers to seperate variables and functions (*Easier to read)
