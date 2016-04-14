@@ -16,6 +16,7 @@ private:
 	float fY;
 public:
 	Reposition_Action(TankControl* ptr_tank);
+	
 	virtual bool run() override;
 };
 
