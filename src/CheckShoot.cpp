@@ -36,7 +36,7 @@ Shoot_Action::Shoot_Action(TankControl *ptr_tank) {
 
 bool HaveAmmo_Condition::run() {
 	if (tank->getNumberOfShells() > 0) {
-		std::cout << "Have Ammo\n";
+		//std::cout << "Have Ammo\n";
 		return true;
 	}
 	else {
@@ -46,7 +46,7 @@ bool HaveAmmo_Condition::run() {
 
 bool LOS_Condition::run() {
 	std::cout << " Checking LOS\n";
-	if (tank->bTurretOnTarget) {
+	if (tank->bTurretOnTarget&& tank->willShellHitFreindlyBuilding() == false) {
 		return true;					//Turret is aimed
 	}
 	else {
@@ -56,7 +56,7 @@ bool LOS_Condition::run() {
 
 bool Aim_Action::run() {
 	if (tank->getNumberOfShells() > 0) {
-		std::cout << "Have Ammo\n";
+		//std::cout << "Have Ammo\n";
 		return true;
 	}
 	else {
