@@ -1,4 +1,5 @@
 #include "CheckEnemyBase.h"
+#include "Calculations.h"
 
 CheckEnemyBase::CheckEnemyBase(TankControl *ptr_tank) {
 	isWinning = new Winning_Condition(ptr_tank);
@@ -9,7 +10,7 @@ CheckEnemyBase::CheckEnemyBase(TankControl *ptr_tank) {
 	addChild(isWinning);
 	addChild(haveAmmo);
 	addChild(targetBase);
-	addChild(checkShoot);
+	//addChild(checkShoot);
 }
 
 CheckEnemyBase::~CheckEnemyBase() {
@@ -44,5 +45,9 @@ bool TargetBase_Action::run() {
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
 	//if(tank->bTurretOnTarget)tank->fireShell();
+	if (rotationDiff(Position(tank->getX(),tank->getY()),tank->getTurretDesiredPos()) <= 1.0f) {
+		std::cout << "\n\n\n\n";
+		tank->bShoot = true;
+	}
 	return true;
 }
