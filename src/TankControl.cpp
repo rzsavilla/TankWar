@@ -94,6 +94,28 @@ bool TankControl::m_rotateToAngle(float angle)
 		return true;
 	}
 }
+bool TankControl::m_rotateTurretToAngle(float angle)
+{
+	float currentOrientation = this->turretTh;
+	float rotationDiff = angle - currentOrientation;
+	if (currentOrientation != angle) // not yet reached
+	{
+		if (rotationDiff < 0)
+		{
+			turretGoLeft();
+		}
+		else
+		{
+			turretGoRight();
+		}
+		return false;
+	}
+	else // reached
+	{
+		stopTurret();
+		return true;
+	}
+}
 bool TankControl::m_rotateTurretTowards(Position targetPosition) {
 	float fDirection = rotationDiff(this->pos, targetPosition,this->turretTh);			//Also distance
 
@@ -345,7 +367,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 bool TankControl::willShellHitFreindlyBuilding()
 {
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 10; i++)
 	{
 
 		if (bEnemySpotted && bBaseSpotted)// both are in vision
@@ -370,9 +392,9 @@ bool TankControl::willShellHitFreindlyBuilding()
 
 			//find corrds of buidling bounding box
 			myVector topLeft(vBasePos[i].second.getX(), vBasePos[i].second.getY());
-			myVector topRight(vBasePos[i].second.getX()+20, vBasePos[i].second.getY());
-			myVector bottomLeft(vBasePos[i].second.getX(), vBasePos[i].second.getY()+20);
-			myVector bottomRight(vBasePos[i].second.getX() + 20, vBasePos[i].second.getY() + 20);
+			myVector topRight((vBasePos[i].second.getX())+20, vBasePos[i].second.getY());
+			myVector bottomLeft(vBasePos[i].second.getX(), (vBasePos[i].second.getY()) + 20);
+			myVector bottomRight((vBasePos[i].second.getX()) + 20, (vBasePos[i].second.getY()) + 20);
 
 			float x;
 			float y;
@@ -383,16 +405,22 @@ bool TankControl::willShellHitFreindlyBuilding()
 			//using trig
 			float shellX = 3 * cos(aimingAt);
 			float shellY = 3 * sin(aimingAt);
-
+	
 			myVector changeInXY(shellX, shellY);
+
+			//find shell origin
+			Position Origin=firingPosition();
+			float xOrigin = Origin.getX();
+			float yOrigin = Origin.getY();
+
 
 			//shell going vertical
 				if (changeInXY.i() == 0) // make sure no divide by zero error
 				{
-					if (shellCurrPos.getX() > topLeft.i() - 25 && shellCurrPos.getX() < topRight.i() + 25) // shell going vcetical
+					if (xOrigin > topLeft.i() - 25 && xOrigin < topRight.i() + 25) // shell going vcetical
 					{
 						
-						if (shellCurrPos.getY() < topLeft.j())
+						if (yOrigin < topLeft.j())
 						{
 							//it could hit
 							//what is closer tank or buidling
@@ -402,7 +430,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 								return true; // will hit
 							}
 						}
-						else if (shellCurrPos.getY() > bottomLeft.j())
+						else if (yOrigin > bottomLeft.j())
 						{
 							// it could hit
 							//what is closer tank or buidling
@@ -420,13 +448,13 @@ bool TankControl::willShellHitFreindlyBuilding()
 					//find shell gradient
 					float shellGradient = changeInXY.j() / changeInXY.i();
 					//find y intercept
-					float shellC = shellCurrPos.getY() - (shellGradient*shellX);
+					float shellC = yOrigin - (shellGradient*xOrigin);
 
 					// if going horizontal 
-					if (shellGradient == 0 && (shellCurrPos.getY() >= topLeft.j() - 25 && shellCurrPos.getY() <= bottomLeft.j() + 25))
+					if (shellGradient == 0 && (yOrigin >= topLeft.j() - 25 && yOrigin <= bottomLeft.j() + 25))
 					{
 						
-						if (shellCurrPos.getX() < topLeft.i())
+						if (xOrigin < topLeft.i())
 						{
 							if (distanceToBuilding < distanceTotank)
 							{
@@ -434,7 +462,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 								return true; // will hit
 							}
 						}
-						if (shellCurrPos.getX() > topRight.i())
+						if (xOrigin > topRight.i())
 						{
 							if (distanceToBuilding < distanceTotank)
 							{
@@ -443,10 +471,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 							}
 						}
 					}
-	
-
-					//equation for tank boundry
-					float tankC;
 
 					// find lines from each corner of tank and check against shell equation ----------------------------------------
 					// use which side it hits to decide how to dodge
@@ -552,8 +576,6 @@ void TankControl::evadeShell()
 	angle = angle * (180 / 3.14);
 	
 	float angleDiff;
-	float fullDiff;
-
 	float minAngle;
 	float maxAngle;
 
@@ -657,32 +679,36 @@ Position TankControl::getEnemyPredictedPos() {
 
 void TankControl::patrolTurret()
 {
-	// swining the turret 90 degrees each way
-	if (swingingTurretLeft == false && swingingTurretRight == false) // if not turning at all
+	if (swingingTurretLeft == false && swingingTurretRight == false)
 	{
 		swingingTurretRight = true;
 	}
-	if (turretTh >= 90) // finished swinging right so swap to left
+	if (swingingTurretRight)
 	{
-		swingingTurretRight = false;
-		swingingTurretLeft = true;
+		if (m_rotateTurretToAngle(pos.getTh() + 90))
+		{
+			swingingTurretLeft = true;
+			swingingTurretRight = false;
+		}
 	}
-	if (turretTh <= 270) // finished swinging left so swap to right
+	if (swingingTurretLeft)
 	{
-		swingingTurretRight = false;
-		swingingTurretLeft = true;
+		if (m_rotateTurretToAngle(pos.getTh() - 90))
+		{
+			swingingTurretLeft =false;
+			swingingTurretRight = true;
+		}
 	}
+}
 
-
-	if (swingingTurretRight == true) // swing it right 
-	{
-		turretGoRight();
-	}
-
-	if (swingingTurretLeft == true) // swing it left 
-	{
-		turretGoLeft();
-	}
+bool TankControl::spinTank()
+{
+	turretGoRight();
+	if (m_rotateToAngle(pos.getTh() + 359)){ return true; }
+	else{ return false; }
+	
+	
+	
 
 
 }

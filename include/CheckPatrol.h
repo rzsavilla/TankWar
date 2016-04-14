@@ -12,6 +12,7 @@ public:
 
 class Reposition_Action : public Action {
 private:
+	bool bOneTime = true;
 	float fX;
 	float fY;
 public:
