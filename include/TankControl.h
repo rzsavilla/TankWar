@@ -23,6 +23,8 @@ class TankControl : public  AITank, public MoveControl, public Vision {
 private:
 	const float fRotationAccuracy = 1.0f;			//!< Offset for rotation, when to end rotation/distance to target rotation
 	const float fTurretRotationAccuracy = 1.0f;		//!< Offset for rotation, when to end rotation/distance to target v
+	bool swingingTurretLeft;
+	bool swingingTurretRight;
 public:
 	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
 	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
@@ -36,6 +38,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 		\param targetPosition Rotate towards this position
 	*/
 	bool m_rotateTowards(Position targetPosition);
+	bool m_rotateToAngle(float angle);
 
 	/*!	\brief Rotate turret towards posistion
 		Turn will aim towards the position. Returns true when rotation is complete
@@ -54,7 +57,8 @@ public:
 	void evadeShell();
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
-	vector<bool> bSideOfImpact;
+	void patrolTurret();
+	
 
 	//Predictive Aiming
 	const float kfShellSpeed = 3.0f;	//!< Shell movement speed
