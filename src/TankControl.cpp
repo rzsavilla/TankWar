@@ -153,7 +153,6 @@ void TankControl::collided() {
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
 	enemyBasePos = p;
-	std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	if (vEnemyBasePos.size() <= 0) {
 		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
@@ -221,6 +220,8 @@ bool TankControl::isFiring() {
 
 void TankControl::score(int thisScore, int enemyScore) {
 	//Check Scored
+	iMyScore = thisScore;
+	iEnemyScore = enemyScore;
 
 	//----------Possible to use this as a way to check if shell hits target------------/////////
 }
@@ -413,7 +414,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 			float xOrigin = Origin.getX();
 			float yOrigin = Origin.getY();
 
-
+			
 			//shell going vertical
 				if (changeInXY.i() == 0) // make sure no divide by zero error
 				{
@@ -711,4 +712,8 @@ bool TankControl::spinTank()
 	
 
 
+}
+
+float TankControl::getTurretAngle() {
+	return turretTh;
 }

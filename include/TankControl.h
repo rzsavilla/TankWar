@@ -47,6 +47,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 	*/
 	bool m_rotateTurretTowards(Position targetPosition);
 
+	float getTurretAngle();
 public:
 	//Note * replace this with Decorator repeat node
 	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times

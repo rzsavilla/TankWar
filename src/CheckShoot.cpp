@@ -1,4 +1,5 @@
 #include "CheckShoot.h"
+#include "Calculations.h"
 
 CheckShoot::CheckShoot(TankControl *ptr_tank) {
 	haveAmmo = new HaveAmmo_Condition(ptr_tank);
@@ -47,8 +48,9 @@ bool HaveAmmo_Condition::run() {
 
 bool LOS_Condition::run() {
 	std::cout << " Checking LOS\n";
-	if (tank->bTurretOnTarget && tank->willShellHitFreindlyBuilding() == false) {
-		
+	float fDist = (rotationDiff(Position(tank->getX(), tank->getY()),tank->getTurretDesiredPos(),tank->getTurretAngle()));
+	std::cout << fDist << std::endl;
+	if (fabs(fDist) <= 1.f && tank->willShellHitFreindlyBuilding() == false) {
 		return true;					//Turret is aimed
 	}
 	else {

@@ -8,9 +8,8 @@ CheckEnemyBase::CheckEnemyBase(TankControl *ptr_tank) {
 	checkShoot = new CheckShoot(ptr_tank);
 
 	addChild(isWinning);
-	addChild(haveAmmo);
 	addChild(targetBase);
-	//addChild(checkShoot);
+	addChild(checkShoot);
 }
 
 CheckEnemyBase::~CheckEnemyBase() {
@@ -29,7 +28,8 @@ TargetBase_Action::TargetBase_Action(TankControl *ptr_tank) {
 }
 
 bool Winning_Condition::run() {
-	if (tank->bEnemyBaseSpotted && tank->iMyScore < tank->iEnemyScore) {
+	
+	if (tank->bEnemyBaseSpotted /*&& tank->iMyScore < tank->iEnemyScore*/) {
 		std::cout << "Is winning" << endl;;
 		return true;
 	}
@@ -44,6 +44,9 @@ bool TargetBase_Action::run() {
 	//std::cout << "Size: " <<tank->vEnemyBasePos.size() << std::endl;
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
-	//if(tank->bTurretOnTarget)tank->fireShell();
-	return false;
+	if (tank->bTurretOnTarget) {
+		tank->bShoot = true;
+	}
+
+	return true;
 }
