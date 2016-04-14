@@ -37,14 +37,14 @@ bool Reposition_Action::run() {
 
 	if (tank->bEnemySpotted)
 	{
-		cout << "Stop patrol!" << endl;
-		return false;
+		//cout << "Stop patrol!" << endl;
+		//return false;
 	}
 	if (tank->bEnemyBaseSpotted)
 	{
-		cout << "Stop patrol!" << endl;
+		//cout << "Stop patrol!" << endl;
 
-		return false;
+		//return false;
 	}
 
 	if (!tank->bIsMoving) {						//Reposition tank

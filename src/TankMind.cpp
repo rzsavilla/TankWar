@@ -27,14 +27,14 @@ void TankMind::createBehaviour() {
 }
 
 void TankMind::move() {
-	/*
+	
 	//Print what the tank can see
-	std::cout << "Vision: " << "ETank:" << bEnemySpotted
-		      << " ETankM:" << bEnemyMoving
-		      << " Shell:" << bShellSpotted << " Base:"
-		      << bBaseSpotted << " EBase:" << bEnemyBaseSpotted
-		      << " OnTarget:" << bTurretOnTarget << std::endl;
-	*/
+	//std::cout << "Vision: " << "ETank:" << bEnemySpotted
+	//	      << " ETankM:" << bEnemyMoving
+	//	      << " Shell:" << bShellSpotted << " Base:"
+	//	      << bBaseSpotted << " EBase:" << bEnemyBaseSpotted
+	//	      << " OnTarget:" << bTurretOnTarget << std::endl;
+	
 	//Reset tank rotation
 	this->stop();			//Stop tank rotation 
 	this->stopTurret();		//Stop turret rotation
