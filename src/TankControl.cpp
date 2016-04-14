@@ -130,17 +130,18 @@ void TankControl::collided() {
 
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
+		//First check
 	if (vEnemyBasePos.size() <= 0) {
-		vEnemyBasePos.push_back(p);
+		vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
-		if (!findMatch(p, vEnemyBasePos)) {
-			vEnemyBasePos.push_back(p);
+		if (!findMatch(p,vEnemyBasePos)) {
+			vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
-	//bEnemyBaseSpotted = true;		//Enemy can see an enemy base
+	bEnemyBaseSpotted = true;		//Enemy can see an enemy base
 }
 
 void TankControl::markEnemy(Position p) {
@@ -164,12 +165,12 @@ void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
 	if (vBasePos.size() <= 0) {
-		vBasePos.push_back(p);
+		vBasePos.push_back(std::pair<bool, Position>(true,p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vBasePos)) {		//Iterate through bases spotted and check if they have already been found
-			vBasePos.push_back(p);
+			//vBasePos.push_back(p);
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
