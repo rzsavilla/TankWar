@@ -8,10 +8,10 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	maintainDistance = new MaintainDistance(ptr_tank);
 
 	this->addChild(enemySpotted);
-	this->addChild(haveAmmo);
+	//this->addChild(haveAmmo);
 	this->addChild(predictAim);
 	this->addChild(checkShoot);
-	this->addChild(maintainDistance);
+	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
