@@ -30,12 +30,14 @@ TargetBase_Action::TargetBase_Action(TankControl *ptr_tank) {
 bool Winning_Condition::run() {
 	if (tank->bEnemyBaseSpotted && tank->iMyScore >= tank->iEnemyScore) {
 		std::cout << "Is winning";
+	}
+	if (tank->iMyScore >= tank->iEnemyScore) {
+	//	std::cout << "Is winning";
 		return true;
 	}
 	else {
 		return false;
 	}
-	
 }
 
 bool TargetBase_Action::run() {
