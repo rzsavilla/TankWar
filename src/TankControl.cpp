@@ -2,19 +2,15 @@
 
 TankControl::TankControl()
 {
-	m_iCallCounter = 0;
-	bSideOfImpact.resize(4);
-	bSideOfImpact[0] = false;
-	bSideOfImpact[1] = false;
-	bSideOfImpact[2] = false;
-	bSideOfImpact[3] = false;
-
 	bIsDodging = false;
 
 	shellPrevPos = Position(0.0f, 0.0f);
 	shellCurrPos = Position(0.0f, 0.0f);
 	enemyPrevPos = Position(0.0f, 0.0f);
 	enemyCurrPos = Position(0.0f, 0.0f);
+
+	swingingTurretLeft = false;
+	swingingTurretRight = false;
 }
 
 void TankControl::m_Update() {
@@ -73,7 +69,31 @@ bool TankControl::m_rotateTowards(Position targetPosition) {
 		return false;
 	}
 }
-
+bool TankControl::m_rotateToAngle(float angle)
+{
+	float currentOrientation = this->pos.getTh();
+	float rotationDiff = angle - currentOrientation;
+	if (currentOrientation != angle) // not yet reached
+	{
+		if (rotationDiff < 0)
+		{
+			goLeft();
+			turretGoLeft();
+		}
+		else
+		{
+			goRight();
+			turretGoRight();
+		}
+		return false;
+	}
+	else // reached
+	{
+		stopTurret();
+		stop();
+		return true;
+	}
+}
 bool TankControl::m_rotateTurretTowards(Position targetPosition) {
 	float fDirection = rotationDiff(this->pos, targetPosition,this->turretTh);			//Also distance
 
@@ -183,11 +203,7 @@ void TankControl::score(int thisScore, int enemyScore) {
 
 bool TankControl::willShellHit(Position pshell, Position pprevShell)
 {
-	bSideOfImpact[0] = false; // top
-	bSideOfImpact[1] = false; // right
-	bSideOfImpact[2] = false; // bottom
-	bSideOfImpact[3] = false; // left
-
+	
 	//get positions of objects
 
 	float pshellX = pshell.getX();
@@ -219,17 +235,15 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 	if (changeInXY.i() == 0) // make sure no divide by zero error
 	{
-		if (shell.i() > topLeft.i() && shell.i() < topRight.i()) // shell going vcetical
+		if (shell.i() > topLeft.i() - 10 && shell.i() < topRight.i() + 10) // shell going vcetical
 		{
 			cout << "vertical" << endl;
 			if (shell.j() < topLeft.j())
 			{
-				bSideOfImpact[0] = true;
 				return true; // will hit
 			}
 			if (shell.j() > bottomLeft.j())
 			{
-				bSideOfImpact[2] = true;
 				return true; // will hit
 			}
 			
@@ -238,26 +252,21 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 	}
 	else
 	{
+		//find shell gradient
 		float shellGradient = changeInXY.j() / changeInXY.i();
 		//find y intercept
 		float shellC = shell.j() - (shellGradient*shell.i());
-		// shell.j() = shellGradient * shell.i() + shellC
-		// general equation y = shellGradient * X + shellC
-
-
-
+		
 		// if going horizontal 
-		if (shellGradient == 0 && (shell.j() >= topLeft.j() && shell.j() <= bottomLeft.j()))
+		if (shellGradient == 0 && (shell.j() >= topLeft.j() - 10 && shell.j() <= bottomLeft.j()+ 10))
 		{
 			cout << "horizontal" << endl;
 			if (shell.i() < topLeft.i())
 			{
-				bSideOfImpact[3] = true;
 				return true; // will hit
 			}
 			if (shell.i() > topRight.i())
 			{
-				bSideOfImpact[1] = true;
 				return true; // will hit
 			}
 			
@@ -273,7 +282,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// find lines from each corner of tank and check against shell equation ----------------------------------------
 		// use which side it hits to decide how to dodge
 
-		cout << "deciding which side" << endl;
+		
 		//top left to top right
 		y = topLeft.j();
 		m = shellGradient;
@@ -282,9 +291,8 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// find x
 		x = (y - c) / m;
 		
-		if (x >= topLeft.i() && x <= topRight.i()) // if x at this value for y intersects
+		if (x >= topLeft.i() - 10 && x <= topRight.i()+10) // if x at this value for y intersects
 		{
-			bSideOfImpact[0] = true;
 			return true; // will hit
 		}
 
@@ -295,9 +303,8 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		c = shellC;
 		// find y
 		y = x*m + c;
-		if (y > topRight.j() && x < bottomRight.j()) // if y at this value for x intersects
+		if (y >= topRight.j() - 10 && y <= bottomRight.j() + 10) // if y at this value for x intersects
 		{
-			bSideOfImpact[1] = true;
 			return true; // will hit
 
 		}
@@ -310,9 +317,8 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// find x
 		x = (y - c) / m;
 
-		if (x > bottomLeft.i() && x < bottomRight.i())
+		if (x >= bottomLeft.i() -10 && x <= bottomRight.i() + 10)
 		{
-			bSideOfImpact[2] = true;
 			return true; // will hit
 
 		}
@@ -325,74 +331,82 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		c = shellC;
 		// find y
 		y = x*m + c;
-		if (y > topLeft.j() && x < bottomLeft.j())
+		if (y >= topLeft.j() - 10 && y <= bottomLeft.j() + 10)
 		{
-			bSideOfImpact[3] = true;
 			return true; // will hit
 
 		}
 
 	}
-
-	bSideOfImpact[0] = false;
-	bSideOfImpact[1] = false;
-	bSideOfImpact[2] = false;
-	bSideOfImpact[3] = false;
-	cout << "no side" << endl;
 	return false; // wont hit
 }
 
 void TankControl::evadeShell()
 {
-	//find the centre of the tank
-	float x = pos.getX();
-	float y = pos.getY();
+	//set up the tank
 	float orientation = this->pos.getTh();
-	myVector centreOfTank(x + 100, y + 100);
+	myVector centerOfTank(pos.getX() + 100, pos.getY()+100);
 	bIsDodging = true;
 
-	cout << "top " <<bSideOfImpact[0] << endl;
-	cout << "right " << bSideOfImpact[1] << endl;
-	cout << "down " << bSideOfImpact[2] << endl;
-	cout << "left " << bSideOfImpact[3] << endl;
+	// find angle of shell to the tank
 
+	//make 2 vectors
+	float bX = shellCurrPos.getX() - shellPrevPos.getX();
+	float bY = shellCurrPos.getY() - shellPrevPos.getY();
+	float aX = pos.getX() - oldPos.getX();
+	float aY = pos.getY() - oldPos.getY();
 
-	if (bSideOfImpact[0] == true || bSideOfImpact[2] == true) // shell is coming down at tank
+	// create vector between the two
+	float X = bX - aX;
+	float Y = bY - aY;
+
+	float angle = atan(Y / X);
+	angle = angle * (180 / 3.14);
+	
+	float angleDiff;
+	float fullDiff;
+
+	float minAngle;
+	float maxAngle;
+
+	// convert the angle so it relates to the tanks orientation
+	if (angle < 0 && shellCurrPos.getY() <= pos.getY()) angleDiff = 360 + angle;
+	else if (angle > 0 && shellCurrPos.getY() <= pos.getY()) angleDiff = 180 + angle;
+	else if (angle > 0 && shellCurrPos.getY() > pos.getY()) angleDiff = angle;
+	else if (angle < 0 && shellCurrPos.getY() > pos.getY()) angleDiff = 180 + angle;
+
+	//set min and max angle to achieve
+	maxAngle = angleDiff + 45;
+	minAngle = angleDiff - 45;
+
+	//does the tank need to adjust roation
+	// rotation must be +- 45 from the shell
+	if (orientation < maxAngle && orientation > minAngle)
 	{
-		cout << orientation << endl;
-		if ((orientation >= 270 & orientation < 360)|| orientation >= 0 && orientation <90) // dodge to the right
+		//decide which is closer min or max angle
+		if (orientation > angleDiff)
 		{
-			cout << "Go - right" << endl;
-			setDesiredPosition(centreOfTank.i() + 600, centreOfTank.j()-100);
-			//cout << "Go" << endl;
-			
+			m_rotateToAngle(maxAngle);
 		}
-		if (orientation < 270 & orientation >= 90)  // dodge to the left
+		if (orientation < angleDiff)
 		{
-			cout << "Go - left" << endl;
-			setDesiredPosition(centreOfTank.i() - 600, centreOfTank.j()-100);
-			//cout << "Go" << endl;
-			
+			m_rotateToAngle(minAngle);
 		}
 	}
-	/*
-	if (bSideOfImpact[1] == true)// dodge downards
+	else
 	{
-		despiredPos = myVector(centreOfTank.i(), centreOfTank.j() + 300);
-		setDesiredPosition(despiredPos.i(), despiredPos.j());
+		//work out which direction is best to drive
+		if(orientation < maxAngle-180 && orientation > minAngle-180)
+		{
+			goForward();
+		}
+		else
+		{
+			goBackward();
+		}
+		
 	}
-	if (bSideOfImpact[2] == true)// dodge to the left
-	{
-		despiredPos = myVector(centreOfTank.i() - 300, centreOfTank.j());
-		setDesiredPosition(despiredPos.i(), despiredPos.j());
-	}
-	if (bSideOfImpact[3] == true)// dodge uppwards
-	{
-		despiredPos = myVector(centreOfTank.i(), centreOfTank.j() - 300);
-		setDesiredPosition(despiredPos.i(), despiredPos.j());
-	}
-	setDesiredPosition(0, 0);
-	*/
+
 }
 
 bool TankControl::checkShellProximity()
@@ -451,4 +465,36 @@ Position TankControl::getEnemyPredictedPos() {
 	std::cout << "Predicted: " << predictedPos.getX() << " " << predictedPos.getY() << std::endl;
 
 	return predictedPos;
+}
+
+void TankControl::patrolTurret()
+{
+	// swining the turret 90 degrees each way
+	if (swingingTurretLeft == false && swingingTurretRight == false) // if not turning at all
+	{
+		swingingTurretRight = true;
+	}
+	if (turretTh >= 90) // finished swinging right so swap to left
+	{
+		swingingTurretRight = false;
+		swingingTurretLeft = true;
+	}
+	if (turretTh <= 270) // finished swinging left so swap to right
+	{
+		swingingTurretRight = false;
+		swingingTurretLeft = true;
+	}
+
+
+	if (swingingTurretRight == true) // swing it right 
+	{
+		turretGoRight();
+	}
+
+	if (swingingTurretLeft == true) // swing it left 
+	{
+		turretGoLeft();
+	}
+
+
 }
