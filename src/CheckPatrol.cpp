@@ -35,12 +35,25 @@ bool Reposition_Action::run() {
 		std::cout << "Reached Position\n";
 	}
 
+	if (tank->bEnemySpotted)
+	{
+		cout << "Stop patrol!" << endl;
+		return false;
+	}
+	if (tank->bEnemyBaseSpotted)
+	{
+		cout << "Stop patrol!" << endl;
+
+		return false;
+	}
+
 	if (!tank->bIsMoving) {						//Reposition tank
 		fX = (float)(rand() % 750 + 10);		//Generate random position
 		fY = (float)(rand() % 540 + 10);
 		std::cout << "Repositioning\n";
 		tank->bIsMoving = true;					//Tank has is now moving
 	}
+	tank->patrolTurret();
 	tank->setDesiredPosition(fX, fY);
 	
 	return true;
@@ -51,6 +64,6 @@ bool BasesNotFound_Condition::run() {
 		//All bases found
 		return true;
 	}
-	std::cout << "Looking for bases\n";
+
 	return false;
 }

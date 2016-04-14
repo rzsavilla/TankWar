@@ -29,11 +29,9 @@ public:
 	virtual bool run() override;
 };
 
-
 class CheckShoot : public BehaviourTree::Sequence {
 private:
 	HaveAmmo_Condition *haveAmmo;
-	Aim_Action *aimTurret;
 	LOS_Condition *hasLOS;
 	Shoot_Action *shoot;
 public:

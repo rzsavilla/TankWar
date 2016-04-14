@@ -10,24 +10,25 @@ AI for tank using Finite State Machine approach.
 
 #include <iostream>
 
-#include "aitank.h"
-#include "Vision.h"
-#include "MoveControl.h"
-#include "Calculations.h"
-#include "myVector.h"
+#include "aitank.h"				//Base code tank
+#include "Vision.h"				//Tank perception data on the world				//Abstraction
+#include "MoveControl.h"		//Tank improved move functions/simplified		//Abstraction
+#include "Calculations.h"		//Math calculations
+#include "myVector.h"			//2D Vector
 
 using namespace std;
 using namespace sf;
 
 class TankControl : public  AITank, public MoveControl, public Vision {
 private:
-	const float fRotationAccuracy = 1.0f;
-	const float fTurretRotationAccuracy = 1.0f;
-protected:
+	const float fRotationAccuracy = 1.0f;			//!< Offset for rotation, when to end rotation/distance to target rotation
+	const float fTurretRotationAccuracy = 1.0f;		//!< Offset for rotation, when to end rotation/distance to target v
+	bool swingingTurretLeft;
+	bool swingingTurretRight;
+public:
 	bool bOnTarget;			//!< Tank is rotated towards its desired rotation
 	bool bTurretOnTarget;   //!< Turret is rotates towards desired position
 public: //Multiple access modifiers to seperate variables and functions (*Easier to read)
-	//State Actions
 
 	void m_Update();		//!< Update Tank movement and vision.
  
@@ -37,6 +38,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 		\param targetPosition Rotate towards this position
 	*/
 	bool m_rotateTowards(Position targetPosition);
+	bool m_rotateToAngle(float angle);
 
 	/*!	\brief Rotate turret towards posistion
 		Turn will aim towards the position. Returns true when rotation is complete
@@ -55,8 +57,19 @@ public:
 	void evadeShell();
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
-	vector<bool> bSideOfImpact;
+	void patrolTurret();
+	
 
+	//Predictive Aiming
+	const float kfShellSpeed = 3.0f;	//!< Shell movement speed
+	const float kfMoveSpeed = 1.75f;	//!< Tank movement speed
+	/*!
+		Calculate and return predicted enemy position
+		Code and resource used for function found:
+		https://www.scirra.com/forum/what-is-the-formula-for-predictive-aim_t115697
+		https://www.reddit.com/r/gamedev/comments/16ceki/turret_aiming_formula/c7vbu2j
+	*/
+	Position getEnemyPredictedPos(); 
 public:
 	TankControl();	//!< Default Contructor
 
