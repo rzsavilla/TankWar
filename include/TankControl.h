@@ -39,6 +39,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 	*/
 	bool m_rotateTowards(Position targetPosition);
 	bool m_rotateToAngle(float angle);
+	bool m_rotateTurretToAngle(float angle);
 
 	/*!	\brief Rotate turret towards posistion
 		Turn will aim towards the position. Returns true when rotation is complete
@@ -59,6 +60,7 @@ public:
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
 	void patrolTurret();
+	bool spinTank();
 	
 
 	//Predictive Aiming
