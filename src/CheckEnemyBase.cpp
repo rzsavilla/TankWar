@@ -28,7 +28,7 @@ TargetBase_Action::TargetBase_Action(TankControl *ptr_tank) {
 }
 
 bool Winning_Condition::run() {
-	if (true && tank->bEnemyBaseSpotted/*tank->iMyScore >= tank->iEnemyScore*/) {
+	if (tank->bEnemyBaseSpotted && tank->iMyScore >= tank->iEnemyScore) {
 		std::cout << "Is winning";
 		return true;
 	}
@@ -42,7 +42,5 @@ bool TargetBase_Action::run() {
 	std::cout << "Attack Enemy base\n";
 	//std::cout << "Size: " <<tank->vEnemyBasePos.size() << std::endl;
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
-	if (tank->bHasTurretDesiredPos) {
-		return true;
-	}
+	return true;
 }

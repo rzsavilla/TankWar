@@ -11,7 +11,7 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	this->addChild(haveAmmo);
 	this->addChild(predictAim);
 	this->addChild(checkShoot);
-	//this->addChild(maintainDistance);
+	this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
