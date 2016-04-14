@@ -29,7 +29,7 @@ TargetBase_Action::TargetBase_Action(TankControl *ptr_tank) {
 }
 
 bool Winning_Condition::run() {
-	if (tank->bEnemyBaseSpotted && tank->iMyScore >= tank->iEnemyScore) {
+	if (tank->bEnemyBaseSpotted && tank->iMyScore < tank->iEnemyScore) {
 		std::cout << "Is winning" << endl;;
 		return true;
 	}
@@ -45,9 +45,5 @@ bool TargetBase_Action::run() {
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
 	//if(tank->bTurretOnTarget)tank->fireShell();
-	if (rotationDiff(Position(tank->getX(),tank->getY()),tank->getTurretDesiredPos()) <= 1.0f) {
-		std::cout << "\n\n\n\n";
-		tank->bShoot = true;
-	}
-	return true;
+	return false;
 }
