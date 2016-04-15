@@ -79,3 +79,23 @@ void BehaviourTree::Root::setChild(Node* newChild) {
 bool BehaviourTree::Root::run() {
 	return child->run();
 }
+
+////////DECORATOR/////////
+//Decorator will only store a single node
+void BehaviourTree::Decorator::setChild(Node* newChild) {
+	child = newChild;
+}
+
+//Return the child node of the decorator
+BehaviourTree::Node* BehaviourTree::Decorator::getChild() {
+	return child;
+}
+
+/////////////////////SUCCEEDER///////
+bool BehaviourTree::Succeeder::run() {
+	this->getChild()->run();
+	return true;					//Always return true ignores outcome of child node
+}
+
+
+
