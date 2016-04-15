@@ -8,10 +8,12 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	maintainDistance = new MaintainDistance(ptr_tank);
 
 	this->addChild(enemySpotted);
-	this->addChild(haveAmmo);
+	//this->addChild(haveAmmo);
 	this->addChild(predictAim);
-	this->addChild(checkShoot);
-	this->addChild(maintainDistance);
+	//this->addChild(checkShoot);
+	//this->addChild(maintainDistance);
+	//this->addChild(checkShoot);
+	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
@@ -58,18 +60,22 @@ bool EnemySpotted_Condition::run() {
 }
 
 bool PredictAim_Action::run() {
-	if (tank->bEnemyMoving) {				//Check if enemy tank is moving
-		std::cout << "Predictive aim calculations\n";
+	float fEnemyDistance = getDistance(Position(tank->getX(), tank->getY()), tank->enemyCurrPos);
+	std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
+
+	//Predictive aim is unecessary when enemy is too close
+	if (tank->bEnemyMoving && fEnemyDistance > 125.0f) {				//Check if enemy tank is moving
+		//std::cout << "Predictive aim calculations\n";
 		//Aim turret to predicted enemy position
 		tank->setTurretDesiredPosition(tank->getEnemyPredictedPos());
-		tank->bFastRotation = true;
 	}
-	else {
-		std::cout << "Aiming\n";
-		//Enemy Tank not moving
+	else {	//Enemy Tank not moving/Is too close
+		//std::cout << "Aiming\n";
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
 		tank->bFastRotation = true;
 	}
+	tank->bFastRotation = true;		//Tank will rotate with turret
+	tank->bShoot = true;			//Will shoot when on target
 	return true;
 }
 
@@ -96,7 +102,6 @@ bool EnemyTooClose_Condition::run() {
 
 	return false;
 }
-
 
 bool MoveAway_Action::run() {
 	std::cout << "Moving Away\n\n\n\n";

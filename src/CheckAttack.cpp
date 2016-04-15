@@ -10,15 +10,15 @@ CheckAttack::CheckAttack(TankControl *ptr) {
 
 CheckAttack::~CheckAttack() {
 	delete haveAmmo;
-	
+	delete chooseTarget;
 }
 
 ChooseTarget::ChooseTarget(TankControl *ptr) {
 	checkEnemy = new CheckEnemy(ptr);
 	checkEnemyBase = new CheckEnemyBase(ptr);
 
-	this->addChild(checkEnemy);
-	this->addChild(checkEnemyBase);
+	this->addChild(checkEnemy);				//Attack enemy tank
+	this->addChild(checkEnemyBase);			//Attack enemy base
 }
 
 ChooseTarget::~ChooseTarget() {

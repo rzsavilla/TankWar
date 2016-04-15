@@ -16,7 +16,7 @@ TankControl::TankControl()
 void TankControl::m_Update() {
 	if (bHasTurretDesiredPos) {
 		if (!m_rotateTurretTowards(getTurretDesiredPos())) {
-			//Target rotation not yet achieved;
+			//Turret rotation not yet achieved;
 			if (bFastRotation) {
 				//Tank Rotates with turret
 				if (rotationDiff(this->pos, getTurretDesiredPos(), this->turretTh) > 0) {
@@ -153,7 +153,6 @@ void TankControl::collided() {
 void TankControl::markTarget(Position p) {
 	//Enemy base spotted
 	enemyBasePos = p;
-	std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	if (vEnemyBasePos.size() <= 0) {
 		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
@@ -187,6 +186,7 @@ void TankControl::markEnemy(Position p) {
 void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
+	enemyBasePos = p;
 	if (vBasePos.size() <= 0) {
 		vBasePos.push_back(std::pair<bool, Position>(true, p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
@@ -212,24 +212,23 @@ void TankControl::markShell(Position p) {
 }
 
 bool TankControl::isFiring() {
-	if (bShoot) {
-		bShoot = false;
+	if (bShoot && bTurretOnTarget) {			//Ensure tank has aimed before shooting
+		bShoot = false;					//Reset shoot
 		return true;					// Tank fires projectile
 	}
 	return false;
 }
 
 void TankControl::score(int thisScore, int enemyScore) {
-	//Check Scored
-
+	//Update scores
+	 this->iMyScore= thisScore;
+	 this->iEnemyScore = enemyScore;
 	//----------Possible to use this as a way to check if shell hits target------------/////////
 }
 
 bool TankControl::willShellHit(Position pshell, Position pprevShell)
 {
-	
 	//get positions of objects
-
 	float pshellX = pshell.getX();
 	float pshellY = pshell.getY();
 
@@ -413,7 +412,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 			float xOrigin = Origin.getX();
 			float yOrigin = Origin.getY();
 
-
+			
 			//shell going vertical
 				if (changeInXY.i() == 0) // make sure no divide by zero error
 				{
@@ -425,7 +424,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 							//it could hit
 							//what is closer tank or buidling
 							if (distanceToBuilding < distanceTotank)
-							{
+{
 								cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << "dont Shoot " << endl;
 								return true; // will hit
 							}
@@ -647,6 +646,7 @@ bool TankControl::reachedDesiredPos() {
 
 }
 
+//Predictive Aiming
 Position TankControl::getEnemyPredictedPos() {
 	//std::cout << "Aim Predict\n";
 	float fShellSpeed = 3.0f;
@@ -665,8 +665,8 @@ Position TankControl::getEnemyPredictedPos() {
 	float fAngle;
 	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
 	//Convert angle to vector position/position adjustment
-	float x = (cos(fAngle) * (fMagnitude / 2));
-	float y = (-sin(fAngle) * (fMagnitude / 2));
+	float x = (cos(fAngle) * (fMagnitude));
+	float y = (-sin(fAngle) * (fMagnitude));
 
 	//Add Adjustment position to enemy current position
 	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());
@@ -711,4 +711,8 @@ bool TankControl::spinTank()
 	
 
 
+}
+
+float TankControl::getTurretAngle() {
+	return turretTh;
 }
