@@ -6,6 +6,8 @@
 #define CHECKSHELL_H
 
 #include "Action.h"
+#include "CheckEnemy.h"
+#include "CheckShoot.h"
 
 //////////Nodes Actions/Conditions/////////////////////
 //! AI can see a shell
@@ -36,18 +38,36 @@ public :
 	virtual bool run() override;
 };
 
+//! Will rotate turret towards enemy
+class RotateToEnemy : public Action {
+public:
+	RotateToEnemy(TankControl* ptr_tank);		//<! Default Constructor initialize nodes and create branch
+	virtual bool run() override;
+};
+
+/*!	
+	Tank will aim turret towards enemy it spots
+*/
+class LookAtEnemy : public BehaviourTree::Succeeder{
+private:
+	RotateToEnemy* rotateToEnemy;		//!< Single Child node will never fail
+public:
+	LookAtEnemy(TankControl* ptr_tank);	//!< Default Constructor
+	~LookAtEnemy();		//!< Destructor
+};
+
+//! Branch checks for shell, if shell will collide, tank will attempt to dodge
 class CheckShell : public BehaviourTree::Sequence {
 private:
 	ShellSpotted_Condition *shellSpotted;
 	ShellIntersect_Condition *shellIntersect;
 	CanAvoid_Condition *canAvoid;
 	Evade_Action *evade;
-	
+
+	LookAtEnemy *lookAtEnemy;	//!< Node will always return true when run
 public:
-	
 	CheckShell(TankControl* ptr_tank); //!< Constructor
 	~CheckShell();					   //!< Destructor, make sure you delete all pointers instanciated using "new"
-	
 };
 
 #endif

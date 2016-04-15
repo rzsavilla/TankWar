@@ -5,12 +5,13 @@ CheckShell::CheckShell(TankControl* ptr_tank){
 	shellIntersect = new ShellIntersect_Condition(ptr_tank);
 	canAvoid = new CanAvoid_Condition(ptr_tank);
 	evade = new Evade_Action(ptr_tank);
-	
+	lookAtEnemy = new LookAtEnemy(ptr_tank);
 
 	addChild(shellSpotted);
 	addChild(shellIntersect);
 	addChild(canAvoid);
 	addChild(evade);
+	addChild(lookAtEnemy);
 }
 
 CheckShell::~CheckShell() {
@@ -101,7 +102,27 @@ bool Evade_Action::run() {
 		tank->bIsDodging = false;
 	}
 	return true;
-	
+}
 
-	
+LookAtEnemy::LookAtEnemy(TankControl* ptr_tank) {
+	rotateToEnemy = new RotateToEnemy(ptr_tank);
+	this->setChild(rotateToEnemy);
+}
+
+LookAtEnemy::~LookAtEnemy() {
+	delete rotateToEnemy;
+}
+
+RotateToEnemy::RotateToEnemy(TankControl* ptr_tank) {
+	this->tank = ptr_tank;
+}
+
+bool RotateToEnemy::run() {
+	std::cout << "Look for enemy\n";
+	if (tank->bEnemySpotted) {
+		std::cout << "Enemy Spotted\n";
+		tank->setTurretDesiredPosition(tank->enemyCurrPos);			//Execute Action
+		return true;
+	}
+	false;	//No enemy spotted action was not executed
 }
