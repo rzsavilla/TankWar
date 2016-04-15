@@ -16,7 +16,7 @@ TankControl::TankControl()
 void TankControl::m_Update() {
 	if (bHasTurretDesiredPos) {
 		if (!m_rotateTurretTowards(getTurretDesiredPos())) {
-			//Target rotation not yet achieved;
+			//Turret rotation not yet achieved;
 			if (bFastRotation) {
 				//Tank Rotates with turret
 				if (rotationDiff(this->pos, getTurretDesiredPos(), this->turretTh) > 0) {
@@ -29,11 +29,7 @@ void TankControl::m_Update() {
 			bTurretOnTarget = false;
 		}
 		else {
-			
 			bTurretOnTarget = true;
-			if (bShoot) {
-
-			}
 			bHasTurretDesiredPos = false;
 			bFastRotation = false;
 		}
@@ -190,6 +186,7 @@ void TankControl::markEnemy(Position p) {
 void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
+	enemyBasePos = p;
 	if (vBasePos.size() <= 0) {
 		vBasePos.push_back(std::pair<bool, Position>(true, p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;

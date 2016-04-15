@@ -39,12 +39,8 @@ bool Winning_Condition::run() {
 
 bool TargetBase_Action::run() {
 	std::cout << "Attack Enemy base\n";
-	tank->setTurretDesiredPosition(tank->enemyBasePos);
-	
+	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
-
-	if (tank->bTurretOnTarget) {		//Shoot when tank is aimed at target
-		tank->bShoot = true;
-	}
+	tank->bShoot = true;
 	return true;
 }

@@ -62,12 +62,12 @@ bool EnemySpotted_Condition::run() {
 bool PredictAim_Action::run() {
 	float fEnemyDistance = getDistance(Position(tank->getX(), tank->getY()), tank->enemyCurrPos);
 	std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
+
 	//Predictive aim is unecessary when enemy is too close
 	if (tank->bEnemyMoving && fEnemyDistance > 125.0f) {				//Check if enemy tank is moving
 		//std::cout << "Predictive aim calculations\n";
 		//Aim turret to predicted enemy position
 		tank->setTurretDesiredPosition(tank->getEnemyPredictedPos());
-		
 	}
 	else {	//Enemy Tank not moving/Is too close
 		//std::cout << "Aiming\n";
@@ -75,10 +75,7 @@ bool PredictAim_Action::run() {
 		tank->bFastRotation = true;
 	}
 	tank->bFastRotation = true;		//Tank will rotate with turret
-
-	if (tank->bTurretOnTarget) {
-		tank->bShoot = true;			//Shoot when on target
-	}
+	tank->bShoot = true;			//Will shoot when on target
 	return true;
 }
 
@@ -105,7 +102,6 @@ bool EnemyTooClose_Condition::run() {
 
 	return false;
 }
-
 
 bool MoveAway_Action::run() {
 	std::cout << "Moving Away\n\n\n\n";

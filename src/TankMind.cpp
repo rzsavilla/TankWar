@@ -21,9 +21,9 @@ void TankMind::createBehaviour() {
 	checkPatrol = new CheckPatrol(this);
 	checkAttack = new CheckAttack(this);
 
-	root->addChild(checkShell);
-	root->addChild(checkAttack);
-	root->addChild(checkPatrol);
+	root->addChild(checkShell);				//Avoid shell
+	root->addChild(checkAttack);			//Attack enemy
+	root->addChild(checkPatrol);			//Patrol random/bases/enemy
 }
 
 void TankMind::move() {
