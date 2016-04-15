@@ -42,11 +42,18 @@ Evade_Action::Evade_Action(TankControl *ptr_tank) {
 bool ShellSpotted_Condition::run() {
 	
 	if (tank->spottedShell()) {
+		if (firstSpot)
+		{
+			tank->setTurretDesiredPosition(tank->shellCurrPos);
+			firstSpot = false;
+		}
+		
 		///std::cout << "Shell Spotted\n";
 		return true;
 	}
 	else {
 		return false;
+		firstSpot = true;
 	}
 }
 

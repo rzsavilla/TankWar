@@ -10,6 +10,7 @@
 #include "CheckEnemy.h"
 #include "CheckEnemyBase.h"
 #include "CheckPatrol.h"
+#include "CheckAttack.h"
 
 class TankMind: public TankControl {
 private:
@@ -18,6 +19,8 @@ private:
 	CheckEnemy *checkEnemy;
 	CheckEnemyBase *checkEnemyBase;
 	CheckPatrol *checkPatrol;
+	CheckAttack * checkAttack;
+
 public:
 	TankMind();
 	~TankMind();
