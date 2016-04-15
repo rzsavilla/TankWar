@@ -2,7 +2,6 @@
 
 TankMind::TankMind() {
 	createBehaviour();
-	
 }
 
 TankMind::~TankMind() {

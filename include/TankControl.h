@@ -51,7 +51,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 public:
 	//Note * replace this with Decorator repeat node
 	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times
-
+	 
 	// some functions of actions that the tank will need to perform
 	
 	//Note * put this in Calculations class

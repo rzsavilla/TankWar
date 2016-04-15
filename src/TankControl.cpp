@@ -29,7 +29,11 @@ void TankControl::m_Update() {
 			bTurretOnTarget = false;
 		}
 		else {
+			
 			bTurretOnTarget = true;
+			if (bShoot) {
+
+			}
 			bHasTurretDesiredPos = false;
 			bFastRotation = false;
 		}
@@ -211,7 +215,7 @@ void TankControl::markShell(Position p) {
 }
 
 bool TankControl::isFiring() {
-	if (bShoot) {
+	if (bShoot && bTurretOnTarget) {
 		bShoot = false;
 		return true;					// Tank fires projectile
 	}
@@ -426,7 +430,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 							//it could hit
 							//what is closer tank or buidling
 							if (distanceToBuilding < distanceTotank)
-							{
+{
 								cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << "dont Shoot " << endl;
 								return true; // will hit
 							}

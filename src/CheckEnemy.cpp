@@ -10,8 +10,8 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	this->addChild(enemySpotted);
 	this->addChild(haveAmmo);
 	this->addChild(predictAim);
-	this->addChild(checkShoot);
-	this->addChild(maintainDistance);
+	//this->addChild(checkShoot);
+	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
@@ -69,6 +69,9 @@ bool PredictAim_Action::run() {
 		//Enemy Tank not moving
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
 		tank->bFastRotation = true;
+	}
+	if (/*!tank->willShellHitFreindlyBuilding()*/) {
+		tank->bShoot = true;
 	}
 	return true;
 }
