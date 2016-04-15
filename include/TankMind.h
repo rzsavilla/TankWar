@@ -13,11 +13,11 @@
 
 class TankMind: public TankControl {
 private:
-	BehaviourTree::Selector *root = new BehaviourTree::Selector;
-	CheckShell *checkShell = new CheckShell(this);
-	CheckEnemy *checkEnemy = new CheckEnemy(this);
-	CheckEnemyBase *checkEnemyBase = new CheckEnemyBase(this);
-	CheckPatrol *checkPatrol = new CheckPatrol(this);
+	BehaviourTree::Selector *root;
+	CheckShell *checkShell;
+	CheckEnemy *checkEnemy;
+	CheckEnemyBase *checkEnemyBase;
+	CheckPatrol *checkPatrol;
 public:
 	TankMind();
 	~TankMind();

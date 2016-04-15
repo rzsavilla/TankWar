@@ -9,7 +9,7 @@
 #include "position.h"
 
 class Vision {
-protected:
+public:
 	//What the tank can see
 	bool bShellSpotted;			//!< Can see a shell
 	bool bEnemySpotted;			//!< Can see the enemy tank
