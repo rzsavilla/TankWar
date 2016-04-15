@@ -366,8 +366,9 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 bool TankControl::willShellHitFreindlyBuilding()
 {
-	for (int i = 0; i < 10; i++)
+	for (it = vBasePos.begin(); it < vBasePos.end(); it++)
 	{
+	
 
 		if (bEnemySpotted && bBaseSpotted)// both are in vision
 		{
@@ -605,7 +606,7 @@ void TankControl::evadeShell()
 	else
 	{
 		//work out which direction is best to drive
-		if (angleDiff - orientation > 180 )
+		if ( orientation + 90 < angleDiff || orientation - 90 > angleDiff)
 		{
 			goForward();
 		}
