@@ -22,7 +22,7 @@ using namespace sf;
 class TankControl : public  AITank, public MoveControl, public Vision {
 private:
 	const float fRotationAccuracy = 1.0f;			//!< Offset for rotation, when to end rotation/distance to target rotation
-	const float fTurretRotationAccuracy = 1.0f;		//!< Offset for rotation, when to end rotation/distance to target v
+	const float fTurretRotationAccuracy = 5.0f;		//!< Offset for rotation, when to end rotation/distance to target v
 	bool swingingTurretLeft;
 	bool swingingTurretRight;
 public:

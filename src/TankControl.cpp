@@ -215,7 +215,7 @@ bool TankControl::isFiring() {
 		bShoot = false;					//Reset shoot
 		return true;					// Tank fires projectile
 	}
-	return false;
+	return false;		//Tank will not fire 
 }
 
 void TankControl::score(int thisScore, int enemyScore) {
@@ -659,8 +659,8 @@ Position TankControl::getEnemyPredictedPos() {
 	float fDiffX = this->enemyCurrPos.getX() - this->getX();
 	float fDiffY = this->enemyCurrPos.getY() - this->getY();
 
-	fDiffX = fabs(fDiffX);
-	fDiffY = fabs(fDiffY);
+	//fDiffX = fabs(fDiffX);
+	//fDiffY = fabs(fDiffY);
 	float fMagnitude = sqrt(fDiffX * fDiffX + fDiffY * fDiffY);
 
 	//Calculate adjustment angle
@@ -709,10 +709,6 @@ bool TankControl::spinTank()
 	if (m_rotateToAngle(pos.getTh() + 359)){ return true; }
 	else{ return false; }
 	
-	
-	
-
-
 }
 
 float TankControl::getTurretAngle() {
