@@ -6,8 +6,6 @@ CheckEnemyBase::CheckEnemyBase(TankControl *ptr_tank) {
 	isWinning = new Winning_Condition(ptr_tank);
 	haveAmmo = new HaveAmmo_Condition(ptr_tank);
 	targetBase = new TargetBase_Action(ptr_tank);
-	checkShoot = new CheckShoot(ptr_tank);
-	reposition = new Reposition_Action(ptr_tank);
 
 	//Add Nodes to sequence all nodes must succeed else sequence fails
 	addChild(enemyBaseSpotted);
@@ -20,8 +18,6 @@ CheckEnemyBase::~CheckEnemyBase() {
 	delete isWinning;
 	delete haveAmmo;
 	delete targetBase;
-	delete checkShoot;
-	delete reposition;
 }
 
 EnemyBaseSpotted_Condition::EnemyBaseSpotted_Condition(TankControl *ptr_tank) {

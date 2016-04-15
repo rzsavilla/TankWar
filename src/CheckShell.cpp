@@ -124,5 +124,7 @@ bool RotateToEnemy::run() {
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);			//Execute Action
 		return true;
 	}
-	false;	//No enemy spotted action was not executed
+	else {
+		false;	//No enemy spotted action was not executed
+	}
 }

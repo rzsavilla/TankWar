@@ -10,6 +10,7 @@ CheckAttack::CheckAttack(TankControl *tank_ptr) {
 }
 
 CheckAttack::~CheckAttack() {
+	delete canAttack;
 	delete haveAmmo;
 	delete chooseTarget;
 }
