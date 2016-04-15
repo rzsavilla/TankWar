@@ -154,12 +154,12 @@ void TankControl::markTarget(Position p) {
 	//Enemy base spotted
 	enemyBasePos = p;
 	if (vEnemyBasePos.size() <= 0) {
-		vEnemyBasePos.push_back(std::pair<bool,Position>(true,p));
+		vEnemyBasePos.push_back(p);
 		std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vEnemyBasePos)) {
-			vEnemyBasePos.push_back(std::pair<bool, Position>(true, p));
+			vEnemyBasePos.push_back(p);
 			std::cout << "New  Enemy Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -186,14 +186,13 @@ void TankControl::markEnemy(Position p) {
 void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
-	enemyBasePos = p;
 	if (vBasePos.size() <= 0) {
-		vBasePos.push_back(std::pair<bool, Position>(true, p));
+		vBasePos.push_back(p);
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 	}
 	else {
 		if (!findMatch(p, vBasePos)) {		//Iterate through bases spotted and check if they have already been found
-			vBasePos.push_back(std::pair<bool, Position>(true, p));
+			vBasePos.push_back(p);
 			//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
 		}
 	}
@@ -216,7 +215,7 @@ bool TankControl::isFiring() {
 		bShoot = false;					//Reset shoot
 		return true;					// Tank fires projectile
 	}
-	return false;
+	return false;		//Tank will not fire 
 }
 
 void TankControl::score(int thisScore, int enemyScore) {
@@ -366,15 +365,13 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 
 bool TankControl::willShellHitFreindlyBuilding()
 {
-	for (it = vBasePos.begin(); it < vBasePos.end(); it++)
+	for (auto it = vBasePos.begin(); it < vBasePos.end(); it++)
 	{
-	
-
 		if (bEnemySpotted && bBaseSpotted)// both are in vision
 		{
 			myVector freindlyTank(pos.getX(), pos.getY());
 			float aimingAt = turretTh;
-			myVector Building(vBasePos[i].second.getX(), vBasePos[i].second.getY());
+			myVector Building(it->getX(), it->getY());
 			myVector enemeyTank(enemyCurrPos.getX(), enemyCurrPos.getY());
 			myVector dist;
 			float distanceTotank;
@@ -391,10 +388,10 @@ bool TankControl::willShellHitFreindlyBuilding()
 			bool bShellIsGoingVertical = false;
 
 			//find corrds of buidling bounding box
-			myVector topLeft(vBasePos[i].second.getX(), vBasePos[i].second.getY());
-			myVector topRight((vBasePos[i].second.getX())+20, vBasePos[i].second.getY());
-			myVector bottomLeft(vBasePos[i].second.getX(), (vBasePos[i].second.getY()) + 20);
-			myVector bottomRight((vBasePos[i].second.getX()) + 20, (vBasePos[i].second.getY()) + 20);
+			myVector topLeft(it->getX(), it->getY());
+			myVector topRight((it->getX())+20, it->getY());
+			myVector bottomLeft(it->getX(), (it->getY()) + 20);
+			myVector bottomRight((it->getX()) + 20, (it->getY()) + 20);
 
 			float x;
 			float y;
@@ -660,6 +657,9 @@ Position TankControl::getEnemyPredictedPos() {
 	//Position difference between this and enemy tank 
 	float fDiffX = this->enemyCurrPos.getX() - this->getX();
 	float fDiffY = this->enemyCurrPos.getY() - this->getY();
+
+	//fDiffX = fabs(fDiffX);
+	//fDiffY = fabs(fDiffY);
 	float fMagnitude = sqrt(fDiffX * fDiffX + fDiffY * fDiffY);
 
 	//Calculate adjustment angle
@@ -708,10 +708,6 @@ bool TankControl::spinTank()
 	if (m_rotateToAngle(pos.getTh() + 359)){ return true; }
 	else{ return false; }
 	
-	
-	
-
-
 }
 
 float TankControl::getTurretAngle() {
