@@ -38,17 +38,16 @@ bool Reposition_Action::run() {
 	if (tank->bEnemySpotted)
 	{
 		//cout << "Stop patrol!" << endl;
-		return false;
+		//return false;
 	}
 	if (tank->bEnemyBaseSpotted)
 	{
 		//cout << "Stop patrol!" << endl;
 
-		return false;
+		//return false;
 	}
 	else
 	{
-
 		if (!tank->bIsMoving) {						//Reposition tank
 			fX = (float)(rand() % 750 + 10);		//Generate random position
 			fY = (float)(rand() % 540 + 10);
@@ -57,9 +56,8 @@ bool Reposition_Action::run() {
 		}
 		tank->patrolTurret();
 		tank->setDesiredPosition(fX, fY);
-
-		return true;
 	}
+	return true;
 }
 
 bool BasesNotFound_Condition::run() {

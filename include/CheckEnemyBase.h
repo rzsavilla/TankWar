@@ -3,6 +3,7 @@
 
 #include "Action.h"
 #include "CheckShoot.h"
+#include "CheckPatrol.h"
 
 class Winning_Condition: public Condition {
 public:
@@ -23,6 +24,7 @@ private:
 	HaveAmmo_Condition *haveAmmo;
 	TargetBase_Action *targetBase;
 	CheckShoot *checkShoot;
+	Reposition_Action *reposition;
 public:
 	CheckEnemyBase(TankControl *ptr);
 	~CheckEnemyBase();

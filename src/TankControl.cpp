@@ -186,7 +186,6 @@ void TankControl::markEnemy(Position p) {
 void TankControl::markBase(Position p) {
 	//Base spotted
 	//Loops through bases found and compares the base spotted
-	enemyBasePos = p;
 	if (vBasePos.size() <= 0) {
 		vBasePos.push_back(std::pair<bool, Position>(true, p));
 		//std::cout << "New Building:" << " x:" << (int)p.getX() << " y:" << (int)p.getY() << std::endl;
@@ -659,6 +658,9 @@ Position TankControl::getEnemyPredictedPos() {
 	//Position difference between this and enemy tank 
 	float fDiffX = this->enemyCurrPos.getX() - this->getX();
 	float fDiffY = this->enemyCurrPos.getY() - this->getY();
+
+	fDiffX = fabs(fDiffX);
+	fDiffY = fabs(fDiffY);
 	float fMagnitude = sqrt(fDiffX * fDiffX + fDiffY * fDiffY);
 
 	//Calculate adjustment angle
