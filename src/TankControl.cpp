@@ -188,7 +188,7 @@ void TankControl::markShell(Position p) {
 }
 
 bool TankControl::isFiring() {
-	if (bShoot) {
+	if (bShoot && bTurretOnTarget) {			//Ensure tank has aimed before shooting
 		bShoot = false;
 		return true;					// Tank fires projectile
 	}
@@ -196,16 +196,15 @@ bool TankControl::isFiring() {
 }
 
 void TankControl::score(int thisScore, int enemyScore) {
-	//Check Scored
-
+	//Update scores
+	 this->iMyScore= thisScore;
+	 this->iEnemyScore = enemyScore;
 	//----------Possible to use this as a way to check if shell hits target------------/////////
 }
 
 bool TankControl::willShellHit(Position pshell, Position pprevShell)
 {
-	
 	//get positions of objects
-
 	float pshellX = pshell.getX();
 	float pshellY = pshell.getY();
 
@@ -437,6 +436,7 @@ bool TankControl::reachedDesiredPos() {
 
 }
 
+//Predictive Aiming
 Position TankControl::getEnemyPredictedPos() {
 	std::cout << "Aim Predict\n";
 	float fShellSpeed = 3.0f;
@@ -455,8 +455,8 @@ Position TankControl::getEnemyPredictedPos() {
 	float fAngle;
 	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
 	//Convert angle to vector position/position adjustment
-	float x = (cos(fAngle) * (fMagnitude / 2));
-	float y = (-sin(fAngle) * (fMagnitude / 2));
+	float x = (cos(fAngle) * (fMagnitude));
+	float y = (-sin(fAngle) * (fMagnitude));
 
 	//Add Adjustment position to enemy current position
 	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());
