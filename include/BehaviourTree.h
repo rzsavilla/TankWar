@@ -57,6 +57,23 @@ public:
 		virtual bool run() override;
 	};
 
+	//Decorator will only hold a single node
+	class Decorator : public Node {
+	private:
+		Node* child;		//!<Can only have a single child
+	protected:
+		Node* getChild();	//!< Return single node
+	public:
+		void setChild(Node* newChild);
+	};
+
+	//Decorator node will always return true no matter the result of child node
+	class Succeeder : public BehaviourTree::Decorator {
+	private:
+		friend class BehaviourTree;			//!< Allow access to Behaviour tree private/protected members
+		virtual bool run() override;		//!< Run node
+	};
+
 private:
 	Root* root;			//!< Root of the Tree/Starts here
 public:

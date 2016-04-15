@@ -53,7 +53,7 @@ std::vector<BehaviourTree::Node*> BehaviourTree::CompositeNode::childrenShuffled
 //Selectector node succeeds if a single child node is sucessful
 bool BehaviourTree::Selector::run() {
 	for (Node* child : getChildren()) {			//Iterate through child nodes
-		if (child->run()) {
+		if (child->run()) {				//Only one child needs to succeed
 			return true;
 		}
 	}
@@ -64,7 +64,7 @@ bool BehaviourTree::Selector::run() {
 //Runs all child nodes if a single node fails then this whole node fails
 bool BehaviourTree::Sequence::run() {
 	for (Node* child : getChildren()) {			
-		if (!child->run()) {
+		if (!child->run()) {		//All Children must succeed
 			return false;
 		}
 	}
@@ -79,3 +79,23 @@ void BehaviourTree::Root::setChild(Node* newChild) {
 bool BehaviourTree::Root::run() {
 	return child->run();
 }
+
+////////DECORATOR/////////
+//Decorator will only store a single node
+void BehaviourTree::Decorator::setChild(Node* newChild) {
+	child = newChild;
+}
+
+//Return the child node of the decorator
+BehaviourTree::Node* BehaviourTree::Decorator::getChild() {
+	return child;
+}
+
+/////////////////////SUCCEEDER///////
+bool BehaviourTree::Succeeder::run() {
+	this->getChild()->run();
+	return true;					//Always return true ignores outcome of child node
+}
+
+
+

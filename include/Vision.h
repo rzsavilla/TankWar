@@ -27,8 +27,9 @@ public:
 	Position enemyPrevPos;					//!< Previous position of enemy tank
 	Position enemyCurrPos;					//!< Latest position of enemy tank
 	Position enemyBasePos;					//!< Position of last enemy base spotted
-	std::vector<std::pair<bool,Position>> vBasePos;			//!< Positions of spotted bases			//boolean true if buiding is standing
-	std::vector<std::pair<bool,Position>> vEnemyBasePos;	//!< Positions of spotted enemy bases
+	std::vector<std::pair<bool, Position>>::iterator it;
+	std::vector<Position> vBasePos;			//!< Positions of spotted bases
+	std::vector<Position> vEnemyBasePos;	//!< Positions of spotted enemy bases
 
 	bool hasPredictedEnemyPos;				//!< Flag for when predicted enemy position is available
 	Position predictedEnemyPos;				//!< Stores possible position of enemy tank, calculated based on previous position and heading of enemy tank
