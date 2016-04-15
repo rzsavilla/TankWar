@@ -144,6 +144,7 @@ void TankControl::reset() {
 	resetVision();
 	resetMoveControl();
 	bIsMoving = false;
+	bIsDodging = false;
 }
 
 void TankControl::collided() {
