@@ -3,6 +3,13 @@
 
 #include "Action.h"
 
+class ShellNotSpotted_Condition : public Condition{
+public:
+	ShellNotSpotted_Condition(TankControl* ptr_tank);
+	virtual bool run() override;
+
+};
+
 
 class BasesNotFound_Condition : public Condition {
 public:
