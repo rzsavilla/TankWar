@@ -68,7 +68,7 @@ bool PredictAim_Action::run() {
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
 	}
 	tank->bFastRotation = true;		//Tank will rotate with turret
-	if (!tank->willShellHitFreindlyBuilding()) { //Check for friendly fire
+	if (!tank->willShellHitFreindlyBuildingTank()) { //Check for friendly fire
 		tank->bShoot = true;				//Will shoot when on target
 	}
 	return true;
