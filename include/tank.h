@@ -14,7 +14,7 @@ private:
 		static const float moveConst; //!< Total amount of movement allowed each timestep
 		static const float rotMoveConst; //!< Total amount of rotational movement allowed each timestep for the tank
 		static const float turRotMoveConst; //!< Total amount of rotational movement allowed each timestep for the turrent
-protected:
+public:
 		Position pos; //!< Current position of the tank
 		Position oldPos; //!< Previous position of the tank, used in very basic position correction for collisions
 		float turretTh; //!< Current heading of the gun turret

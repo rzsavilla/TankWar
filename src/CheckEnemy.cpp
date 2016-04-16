@@ -8,12 +8,7 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	maintainDistance = new MaintainDistance(ptr_tank);
 
 	this->addChild(enemySpotted);
-	//this->addChild(haveAmmo);
 	this->addChild(predictAim);
-	//this->addChild(checkShoot);
-	//this->addChild(maintainDistance);
-	//this->addChild(checkShoot);
-	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
@@ -73,7 +68,9 @@ bool PredictAim_Action::run() {
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
 	}
 	tank->bFastRotation = true;		//Tank will rotate with turret
-	tank->bShoot = true;			//Will shoot when on target
+	if (!tank->willShellHitFreindlyBuildingTank()) { //Check for friendly fire
+		tank->bShoot = true;				//Will shoot when on target
+	}
 	return true;
 }
 

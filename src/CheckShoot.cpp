@@ -56,6 +56,7 @@ bool LOS_Condition::run() {
 	else {
 		return false;
 	}
+	return true;
 }
 
 bool Aim_Action::run() {

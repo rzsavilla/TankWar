@@ -64,5 +64,4 @@ bool TargetBase_Action::run() {
 	{
 		return false;
 	}
-	
 }
