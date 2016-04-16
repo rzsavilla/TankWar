@@ -55,6 +55,8 @@ bool TargetBase_Action::run() {
 	std::cout << "   Attack Enemy base\n";
 	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
 	tank->bFastRotation = true;
-	tank->bShoot = true;
+	if (tank->bTurretOnTarget) {
+			tank->bShoot = true;
+	}
 	return true;
 }

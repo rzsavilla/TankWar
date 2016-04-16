@@ -56,15 +56,12 @@ public:
 	
 	//Note * put this in Calculations class
 	bool willShellHit(Position pshell, Position pprevShell);
-	bool willShellHitFreindlyBuildingTank();
-	bool willShellHitFreindlyBuildingBuilding();
+	bool willShellHitFreindlyBuilding();
 	void evadeShell();
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
 	void patrolTurret();
 	bool spinTank();	
-	Position shellSeenAt;
-	bool shellWasSeenLookingForSource = false;
 
 	//Predictive Aiming
 	const float kfShellSpeed = 3.0f;	//!< Shell movement speed

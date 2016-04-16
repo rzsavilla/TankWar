@@ -63,10 +63,10 @@ private:
 	ShellIntersect_Condition *shellIntersect;
 	CanAvoid_Condition *canAvoid;
 	Evade_Action *evade;
-	RotateToEnemy *rotateToEnemy;	//!< Node will always return true when run
+
+	LookAtEnemy *lookAtEnemy;	//!< Node will always return true when run
 public:
 	CheckShell(TankControl* ptr_tank); //!< Constructor
-	
 	~CheckShell();					   //!< Destructor, make sure you delete all pointers instanciated using "new"
 };
 
