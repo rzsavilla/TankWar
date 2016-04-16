@@ -1,9 +1,7 @@
 #include "CheckPatrol.h"
 
 CheckPatrol::CheckPatrol(TankControl *ptr_tank) {
-	shellNotSpotted = new ShellNotSpotted_Condition(ptr_tank);
 	reposition = new Reposition_Action(ptr_tank);
-	addChild(shellNotSpotted);
 	addChild(reposition);
 }
 
@@ -17,10 +15,6 @@ FindBases::FindBases(TankControl* ptr_tank) {
 
 FindBases::~FindBases() {
 
-}
-ShellNotSpotted_Condition::ShellNotSpotted_Condition(TankControl * ptr_tank)
-{
-	this->tank = ptr_tank;
 }
 
 BasesNotFound_Condition::BasesNotFound_Condition(TankControl * ptr_tank) {
@@ -58,18 +52,4 @@ bool BasesNotFound_Condition::run() {
 	}
 
 	return false;
-}
-
-bool ShellNotSpotted_Condition::run()
-{
-	
-	if (tank->bShellSpotted)
-	{
-		return false;
-	}
-	else
-	{
-		
-		return true;
-	}
 }
