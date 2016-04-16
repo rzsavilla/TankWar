@@ -48,14 +48,6 @@ bool HaveAmmo_Condition::run() {
 
 bool LOS_Condition::run() {
 	std::cout << " Checking LOS\n";
-	float fDist = (rotationDiff(Position(tank->getX(), tank->getY()),tank->getTurretDesiredPos(),tank->getTurretAngle()));
-	std::cout << fDist << std::endl;
-	if (fabs(fDist) <= 1.f && tank->willShellHitFreindlyBuildingTank() == false) {
-		return true;					//Turret is aimed
-	}
-	else {
-		return false;
-	}
 	return true;
 }
 
