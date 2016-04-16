@@ -22,7 +22,7 @@ using namespace sf;
 class TankControl : public  AITank, public MoveControl, public Vision {
 private:
 	const float fRotationAccuracy = 1.0f;			//!< Offset for rotation, when to end rotation/distance to target rotation
-	const float fTurretRotationAccuracy = 1.0f;		//!< Offset for rotation, when to end rotation/distance to target v
+	const float fTurretRotationAccuracy = 5.0f;		//!< Offset for rotation, when to end rotation/distance to target v
 	bool swingingTurretLeft;
 	bool swingingTurretRight;
 public:
@@ -39,6 +39,7 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 	*/
 	bool m_rotateTowards(Position targetPosition);
 	bool m_rotateToAngle(float angle);
+	bool m_rotateTurretToAngle(float angle);
 
 	/*!	\brief Rotate turret towards posistion
 		Turn will aim towards the position. Returns true when rotation is complete
@@ -46,19 +47,24 @@ public: //Multiple access modifiers to seperate variables and functions (*Easier
 	*/
 	bool m_rotateTurretTowards(Position targetPosition);
 
+	float getTurretAngle();
 public:
 	//Note * replace this with Decorator repeat node
 	int m_iCallCounter; //!< used for tracking functions that need to be called a certain amount of times
-
+	 
 	// some functions of actions that the tank will need to perform
 	
 	//Note * put this in Calculations class
 	bool willShellHit(Position pshell, Position pprevShell);
+	bool willShellHitFreindlyBuildingTank();
+	bool willShellHitFreindlyBuildingBuilding();
 	void evadeShell();
 	bool checkShellProximity();			//!< check to see if the shell is to close to avoid
 	bool reachedDesiredPos();
 	void patrolTurret();
-	
+	bool spinTank();	
+	Position shellSeenAt;
+	bool shellWasSeenLookingForSource = false;
 
 	//Predictive Aiming
 	const float kfShellSpeed = 3.0f;	//!< Shell movement speed

@@ -3,6 +3,13 @@
 
 #include "Action.h"
 #include "CheckShoot.h"
+#include "CheckPatrol.h"
+
+class EnemyBaseSpotted_Condition: public Condition{
+public:
+	EnemyBaseSpotted_Condition(TankControl *ptr_tank);
+	virtual bool run() override;
+};
 
 class Winning_Condition: public Condition {
 public:
@@ -19,15 +26,13 @@ public:
 
 class CheckEnemyBase: public BehaviourTree::Sequence {
 private:
+	EnemyBaseSpotted_Condition *enemyBaseSpotted;
 	Winning_Condition *isWinning;
 	HaveAmmo_Condition *haveAmmo;
 	TargetBase_Action *targetBase;
-	CheckShoot *checkShoot;
 public:
 	CheckEnemyBase(TankControl *ptr);
 	~CheckEnemyBase();
 };
-
-
 
 #endif

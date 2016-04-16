@@ -43,9 +43,9 @@ static float rotationDiff(Position pos1, Position pos2, float heading) {
 */
 
 static bool findMatch(Position pos, std::vector<Position> vPositions) {
-	for (unsigned int i = 0; i < vPositions.size(); i++) {	//Check if position has already been stored
-		if (vPositions.at(i).getX() == pos.getX()) {
-			if (vPositions.at(i).getY() == pos.getY()) {
+	for (std::vector<Position>::iterator it = vPositions.begin(); it < vPositions.end(); it++) {	//Check if position has already been stored
+		if (it->getX() == pos.getX()) {
+			if (it->getY() == pos.getY()) {
 				return true;		//Match found remaining checks/loop ends
 			}
 		}
@@ -68,4 +68,20 @@ static float getDistance(const Position &pos1, const Position &pos2) {
 static float getDistance(float x1, float y1, float x2, float y2) {
 	return (float)sqrt((pow((x2 - x1), 2.0)) + (pow((y2 - y1), 2.0)));
 }
+
+/*!
+	Compute Distance approximation (Taxicab/Manhattan)
+	Formula from
+	https://en.wikibooks.org/wiki/Algorithms/Distance_approximations
+*/
+static float approxDist(const Position& pos1, const Position &pos2) {
+	return pow(pos1.getX() + pos2.getX(), 2) + pow(pos1.getY() - pos1.getY(), 2);
+}
+
+static float approxDist(float x1, float y1, float x2, float y2) {
+	Position pos1(x1, y1);
+	Position pos2(x2, y2);
+	return approxDist(pos1, pos2);
+}
+
 #endif

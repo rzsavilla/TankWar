@@ -26,6 +26,8 @@ public:
 	Position shellCurrPos;					//!< Current position of shell
 	Position enemyPrevPos;					//!< Previous position of enemy tank
 	Position enemyCurrPos;					//!< Latest position of enemy tank
+	Position enemyBasePos;					//!< Position of last enemy base spotted
+	std::vector<std::pair<bool, Position>>::iterator it;
 	std::vector<Position> vBasePos;			//!< Positions of spotted bases
 	std::vector<Position> vEnemyBasePos;	//!< Positions of spotted enemy bases
 
