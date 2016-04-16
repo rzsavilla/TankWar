@@ -549,9 +549,9 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 			myVector freindlyTank(pos.getX(), pos.getY());
 			float aimingAt = turretTh;
 			myVector Building(it->getX(), it->getY());
-			myVector enemeyTank(enemyCurrPos.getX(), enemyCurrPos.getY());
+			myVector enemeyBuilding(enemyBasePos.getX(), enemyBasePos.getY());
 			myVector dist;
-			float distanceTotank;
+			float distanceToEnemyBuilding;
 			float distanceToBuilding;
 
 			//calculate the dist to buidling
@@ -559,8 +559,8 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 			distanceToBuilding = dist.magnitude(dist);
 
 			//calculate dist to tank
-			dist = myVector(freindlyTank.subtract(enemeyTank));
-			distanceTotank = dist.magnitude(dist);
+			dist = myVector(freindlyTank.subtract(enemeyBuilding));
+			distanceToEnemyBuilding = dist.magnitude(dist);
 
 			bool bShellIsGoingVertical = false;
 
@@ -598,7 +598,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 					{
 						//it could hit
 						//what is closer tank or buidling
-						if (distanceToBuilding < distanceTotank)
+						if (distanceToBuilding < distanceToEnemyBuilding)
 						{
 							return true; // will hit
 						}
@@ -607,7 +607,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 					{
 						// it could hit
 						//what is closer tank or buidling
-						if (distanceToBuilding < distanceTotank)
+						if (distanceToBuilding < distanceToEnemyBuilding)
 						{
 
 							return true; // will hit
@@ -629,14 +629,14 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 
 					if (xOrigin < topLeft.i())
 					{
-						if (distanceToBuilding < distanceTotank)
+						if (distanceToBuilding < distanceToEnemyBuilding)
 						{
 							return true; // will hit
 						}
 					}
 					if (xOrigin > topRight.i())
 					{
-						if (distanceToBuilding < distanceTotank)
+						if (distanceToBuilding < distanceToEnemyBuilding)
 						{
 							return true; // will hit
 						}
@@ -657,7 +657,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 
 				if (x >= topLeft.i() - 25 && x <= topRight.i() + 25) // if x at this value for y intersects
 				{
-					if (distanceToBuilding < distanceTotank)
+					if (distanceToBuilding < distanceToEnemyBuilding)
 					{
 						return true; // will hit
 					}
@@ -672,7 +672,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 				y = x*m + c;
 				if (y >= topRight.j() - 25 && y <= bottomRight.j() + 25) // if y at this value for x intersects
 				{
-					if (distanceToBuilding < distanceTotank)
+					if (distanceToBuilding < distanceToEnemyBuilding)
 					{
 						return true; // will hit
 					}
@@ -689,7 +689,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 
 				if (x >= bottomLeft.i() - 25 && x <= bottomRight.i() + 25)
 				{
-					if (distanceToBuilding < distanceTotank)
+					if (distanceToBuilding < distanceToEnemyBuilding)
 					{
 						return true; // will hit
 					}
@@ -706,7 +706,7 @@ bool TankControl::willShellHitFreindlyBuildingBuilding()
 				y = x*m + c;
 				if (y >= topLeft.j() - 25 && y <= bottomLeft.j() + 25)
 				{
-					if (distanceToBuilding < distanceTotank)
+					if (distanceToBuilding < distanceToEnemyBuilding)
 					{
 						return true; // will hit
 					}
