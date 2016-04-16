@@ -63,6 +63,8 @@ public:
 	bool reachedDesiredPos();
 	void patrolTurret();
 	bool spinTank();	
+	Position shellSeenAt;
+	bool shellWasSeenLookingForSource = false;
 
 	//Predictive Aiming
 	const float kfShellSpeed = 3.0f;	//!< Shell movement speed
