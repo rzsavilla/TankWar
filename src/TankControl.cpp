@@ -667,8 +667,8 @@ Position TankControl::getEnemyPredictedPos() {
 	float fAngle;
 	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
 	//Convert angle to vector position/position adjustment
-	float x = (cos(fAngle) * (fMagnitude / 2));
-	float y = (-sin(fAngle) * (fMagnitude / 2));
+	float x = (cos(fAngle) * (fMagnitude));
+	float y = (sin(fAngle) * (fMagnitude));
 
 	//Add Adjustment position to enemy current position
 	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());

@@ -270,7 +270,7 @@ void Game::play()// Play the game for one timestep
 	{
 		if (player.canSee(it->bb) && it->isNpc()) player.markShell(Position((it->bb.getX1() + it->bb.getX2()) / 2.0f, (it->bb.getY1() + it->bb.getY2()) / 2.0f));
 	}
-	if (player.canSee(npc.bb)) npc.markEnemy(Position((npc.bb.getX1() + npc.bb.getX2()) / 2.0f, (npc.bb.getY1() + npc.bb.getY2()) / 2.0f));
+	if (player.canSee(npc.bb)) player.markEnemy(Position((npc.bb.getX1() + npc.bb.getX2()) / 2.0f, (npc.bb.getY1() + npc.bb.getY2()) / 2.0f));
 
 
 	// Move shells
