@@ -3,6 +3,12 @@
 
 #include "Action.h"
 
+class ShellNotSpotted_Condition : public Condition{
+public:
+	ShellNotSpotted_Condition(TankControl* ptr_tank);
+	virtual bool run() override;
+
+};
 
 class BasesNotFound_Condition : public Condition {
 public:
@@ -17,7 +23,6 @@ private:
 	float fY;
 public:
 	Reposition_Action(TankControl* ptr_tank);
-	
 	virtual bool run() override;
 };
 
@@ -29,8 +34,9 @@ public:
 	~FindBases();
 };
 
-class CheckPatrol: public BehaviourTree::Selector{
+class CheckPatrol: public BehaviourTree::Sequence{
 private:
+	ShellNotSpotted_Condition * shellNotSpotted;
 	Reposition_Action *reposition;
 public:
 	float dx, dy;

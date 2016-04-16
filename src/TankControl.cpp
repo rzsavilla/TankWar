@@ -260,7 +260,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 	{
 		if (shell.i() > topLeft.i() - 25 && shell.i() < topRight.i() + 25) // shell going vcetical
 		{
-			cout << "vertical" << endl;
+			
 			if (shell.j() < topLeft.j())
 			{
 				return true; // will hit
@@ -283,7 +283,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 		// if going horizontal 
 		if (shellGradient == 0 && (shell.j() >= topLeft.j() - 25 && shell.j() <= bottomLeft.j()+ 25))
 		{
-			cout << "horizontal" << endl;
+
 			if (shell.i() < topLeft.i())
 			{
 				return true; // will hit
@@ -364,7 +364,7 @@ bool TankControl::willShellHit(Position pshell, Position pprevShell)
 	return false; // wont hit
 }
 
-bool TankControl::willShellHitFreindlyBuilding()
+bool TankControl::willShellHitFreindlyBuildingTank()
 {
 	for (auto it = vBasePos.begin(); it < vBasePos.end(); it++)
 	{
@@ -423,8 +423,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 							//it could hit
 							//what is closer tank or buidling
 							if (distanceToBuilding < distanceTotank)
-{
-								cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << "dont Shoot " << endl;
+							{
 								return true; // will hit
 							}
 						}
@@ -434,7 +433,7 @@ bool TankControl::willShellHitFreindlyBuilding()
 							//what is closer tank or buidling
 							if (distanceToBuilding < distanceTotank)
 							{
-								cout << "dist to tank : " << distanceTotank << " distance to building : " << distanceToBuilding << "dont Shoot " << endl;
+
 								return true; // will hit
 							}
 						}
@@ -456,7 +455,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 						{
 							if (distanceToBuilding < distanceTotank)
 							{
-								cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << " dont shoot " << endl;
 								return true; // will hit
 							}
 						}
@@ -464,7 +462,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 						{
 							if (distanceToBuilding < distanceTotank)
 							{
-								cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << " dont shoot " << endl;
 								return true; // will hit
 							}
 						}
@@ -486,7 +483,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 					{
 						if (distanceToBuilding < distanceTotank)
 						{
-							cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << " dont Shoot " << endl;
 							return true; // will hit
 						}
 					}
@@ -502,7 +498,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 					{
 						if (distanceToBuilding < distanceTotank)
 						{
-							cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << " dont Shoot " << endl;
 							return true; // will hit
 						}
 
@@ -520,7 +515,6 @@ bool TankControl::willShellHitFreindlyBuilding()
 					{
 						if (distanceToBuilding < distanceTotank)
 						{
-							cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding << " dont Shoot " << endl;
 							return true; // will hit
 						}
 
@@ -538,18 +532,193 @@ bool TankControl::willShellHitFreindlyBuilding()
 					{
 						if (distanceToBuilding < distanceTotank)
 						{
-							cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding <<" dont Shoot "<< endl;
 							return true; // will hit
 						}
 					}
-					cout << "dist to tank : " << distanceTotank << "distance to building : " << distanceToBuilding <<" could shoot " <<endl;
-
 				}
 			}
 		}
 
 	return false;
 }
+bool TankControl::willShellHitFreindlyBuildingBuilding()
+{
+	for (auto it = vBasePos.begin(); it < vBasePos.end(); it++)
+	{
+		if (bEnemySpotted && bBaseSpotted)// both are in vision
+		{
+			myVector freindlyTank(pos.getX(), pos.getY());
+			float aimingAt = turretTh;
+			myVector Building(it->getX(), it->getY());
+			myVector enemeyTank(enemyCurrPos.getX(), enemyCurrPos.getY());
+			myVector dist;
+			float distanceTotank;
+			float distanceToBuilding;
+
+			//calculate the dist to buidling
+			dist = myVector(freindlyTank.subtract(Building));
+			distanceToBuilding = dist.magnitude(dist);
+
+			//calculate dist to tank
+			dist = myVector(freindlyTank.subtract(enemeyTank));
+			distanceTotank = dist.magnitude(dist);
+
+			bool bShellIsGoingVertical = false;
+
+			//find corrds of buidling bounding box
+			myVector topLeft(it->getX(), it->getY());
+			myVector topRight((it->getX()) + 20, it->getY());
+			myVector bottomLeft(it->getX(), (it->getY()) + 20);
+			myVector bottomRight((it->getX()) + 20, (it->getY()) + 20);
+
+			float x;
+			float y;
+			float m;
+			float c;
+
+			//calculate gradient of the shell if it was to be shot
+			//using trig
+			float shellX = 3 * cos(aimingAt);
+			float shellY = 3 * sin(aimingAt);
+
+			myVector changeInXY(shellX, shellY);
+
+			//find shell origin
+			Position Origin = firingPosition();
+			float xOrigin = Origin.getX();
+			float yOrigin = Origin.getY();
+
+
+			//shell going vertical
+			if (changeInXY.i() == 0) // make sure no divide by zero error
+			{
+				if (xOrigin > topLeft.i() - 25 && xOrigin < topRight.i() + 25) // shell going vcetical
+				{
+
+					if (yOrigin < topLeft.j())
+					{
+						//it could hit
+						//what is closer tank or buidling
+						if (distanceToBuilding < distanceTotank)
+						{
+							return true; // will hit
+						}
+					}
+					else if (yOrigin > bottomLeft.j())
+					{
+						// it could hit
+						//what is closer tank or buidling
+						if (distanceToBuilding < distanceTotank)
+						{
+
+							return true; // will hit
+						}
+					}
+
+				}
+			}
+			else
+			{
+				//find shell gradient
+				float shellGradient = changeInXY.j() / changeInXY.i();
+				//find y intercept
+				float shellC = yOrigin - (shellGradient*xOrigin);
+
+				// if going horizontal 
+				if (shellGradient == 0 && (yOrigin >= topLeft.j() - 25 && yOrigin <= bottomLeft.j() + 25))
+				{
+
+					if (xOrigin < topLeft.i())
+					{
+						if (distanceToBuilding < distanceTotank)
+						{
+							return true; // will hit
+						}
+					}
+					if (xOrigin > topRight.i())
+					{
+						if (distanceToBuilding < distanceTotank)
+						{
+							return true; // will hit
+						}
+					}
+				}
+
+				// find lines from each corner of tank and check against shell equation ----------------------------------------
+				// use which side it hits to decide how to dodge
+
+
+				//top left to top right
+				y = topLeft.j();
+				m = shellGradient;
+				x = 0;
+				c = shellC;
+				// find x
+				x = (y - c) / m;
+
+				if (x >= topLeft.i() - 25 && x <= topRight.i() + 25) // if x at this value for y intersects
+				{
+					if (distanceToBuilding < distanceTotank)
+					{
+						return true; // will hit
+					}
+				}
+
+				//top right to bottom right
+				y = 0;
+				m = shellGradient;
+				x = topRight.i();
+				c = shellC;
+				// find y
+				y = x*m + c;
+				if (y >= topRight.j() - 25 && y <= bottomRight.j() + 25) // if y at this value for x intersects
+				{
+					if (distanceToBuilding < distanceTotank)
+					{
+						return true; // will hit
+					}
+
+				}
+
+				//bottom right to bottom left
+				y = bottomLeft.j();
+				m = shellGradient;
+				x = 0;
+				c = shellC;
+				// find x
+				x = (y - c) / m;
+
+				if (x >= bottomLeft.i() - 25 && x <= bottomRight.i() + 25)
+				{
+					if (distanceToBuilding < distanceTotank)
+					{
+						return true; // will hit
+					}
+
+				}
+
+
+				//bottom left to top left
+				y = 0;
+				m = shellGradient;
+				x = topRight.i();
+				c = shellC;
+				// find y
+				y = x*m + c;
+				if (y >= topLeft.j() - 25 && y <= bottomLeft.j() + 25)
+				{
+					if (distanceToBuilding < distanceTotank)
+					{
+						return true; // will hit
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
 
 void TankControl::evadeShell()
 {
@@ -668,7 +837,7 @@ Position TankControl::getEnemyPredictedPos() {
 	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
 	//Convert angle to vector position/position adjustment
 	float x = (cos(fAngle) * (fMagnitude));
-	float y = (sin(fAngle) * (fMagnitude));
+	float y = (-sin(fAngle) * (fMagnitude));
 
 	//Add Adjustment position to enemy current position
 	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());
