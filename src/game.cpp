@@ -4,7 +4,7 @@
 Game::Game() // Constructor
 {
 	player.bodyTex.loadFromFile("assets/bluetank.png");
-	player.turretTex.loadFromFile("assets/redTankTurret.png");
+	player.turretTex.loadFromFile("assets/blueTankTurret.png");
 	// Set Backgound
 	background.setSize(sf::Vector2f(780.0f,570.0f));
 	background.setFillColor(sf::Color(40,70,20));
