@@ -53,15 +53,8 @@ bool Winning_Condition::run() {
 
 bool TargetBase_Action::run() {
 	std::cout << "   Attack Enemy base\n";
-	if (tank->willShellHitFreindlyBuildingBuilding())
-	{
-		tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
-		tank->bFastRotation = true;
-		tank->bShoot = true;
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	tank->setTurretDesiredPosition(tank->enemyBasePos.getX(), tank->enemyBasePos.getY());
+	tank->bFastRotation = true;
+	tank->bShoot = true;
+	return true;
 }
