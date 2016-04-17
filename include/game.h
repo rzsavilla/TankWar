@@ -36,7 +36,7 @@ public:
 	void play(); // Play the game for one timestep
 	//DumbTank npc; // Red tank
 	TankMind npc;	// AI Red tank
-	PlayerTank player; // Blue tank
+	TankMind player; // Blue tank
 	void keyPressed(sf::Keyboard::Key key); // function for processing input
 	void keyReleased(sf::Keyboard::Key key); // function for processing input
 	bool gameOver() const; // Has the game finished?

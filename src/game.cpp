@@ -3,6 +3,8 @@
 
 Game::Game() // Constructor
 {
+	player.bodyTex.loadFromFile("assets/blueTank.png");
+	player.turretTex.loadFromFile("assets/blueTankTurret.png");
 	// Set Backgound
 	background.setSize(sf::Vector2f(780.0f, 570.0f));
 	background.setFillColor(sf::Color(40, 70, 20));
@@ -163,6 +165,8 @@ void Game::play()// Play the game for one timestep
 	// Move tank
 	player.markPos();
 	player.move();
+	player.implementMove();
+	if (player.isFiring()){ fireShell(player.firingPosition(), true); }
 
 	// Check for collisions
 	bool collision = false;
@@ -192,7 +196,10 @@ void Game::play()// Play the game for one timestep
 	}
 	if (player.bb.collision(npc.bb)) collision = true;
 
-	if (collision)player.recallPos();
+	if (collision) { 
+		player.recallPos();
+		player.collided();
+	}
 
 
 	// Move AI tank
@@ -249,6 +256,22 @@ void Game::play()// Play the game for one timestep
 		if (npc.canSee(it->bb) && !it->isNpc()) npc.markShell(Position((it->bb.getX1() + it->bb.getX2()) / 2.0f, (it->bb.getY1() + it->bb.getY2()) / 2.0f));
 	}
 	if (npc.canSee(player.bb)) npc.markEnemy(Position((player.bb.getX1() + player.bb.getX2()) / 2.0f, (player.bb.getY1() + player.bb.getY2()) / 2.0f));
+
+	// Check if player Tank can see anything
+	for (list<Obstacle>::iterator it = redBuildings.begin(); it != redBuildings.end(); ++it)
+	{
+		if (player.canSee(it->bb)) player.markTarget(Position((it->bb.getX1() + it->bb.getX2()) / 2.0f, (it->bb.getY1() + it->bb.getY2()) / 2.0f));
+	}
+	for (list<Obstacle>::iterator it = blueBuildings.begin(); it != blueBuildings.end(); ++it)
+	{
+		if (player.canSee(it->bb)) player.markBase(Position((it->bb.getX1() + it->bb.getX2()) / 2.0f, (it->bb.getY1() + it->bb.getY2()) / 2.0f));
+	}
+	for (list<Shell>::iterator it = shells.begin(); it != shells.end(); ++it)
+	{
+		if (player.canSee(it->bb) && it->isNpc()) player.markShell(Position((it->bb.getX1() + it->bb.getX2()) / 2.0f, (it->bb.getY1() + it->bb.getY2()) / 2.0f));
+	}
+	if (player.canSee(npc.bb)) player.markEnemy(Position((npc.bb.getX1() + npc.bb.getX2()) / 2.0f, (npc.bb.getY1() + npc.bb.getY2()) / 2.0f));
+
 
 	// Move shells
 	for (list<Shell>::iterator it = shells.begin(); it != shells.end(); ++it){ it->move(); }
@@ -529,7 +552,7 @@ void Game::keyPressed(sf::Keyboard::Key key)
 	case	sf::Keyboard::Space:
 		if (player.canFire())
 		{
-			player.fire();
+			//player.fire();
 			fireShell(player.firingPosition(), false);
 		}
 		break;
