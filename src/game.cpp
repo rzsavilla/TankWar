@@ -166,7 +166,7 @@ void Game::play()// Play the game for one timestep
 	player.markPos();
 	player.move();
 	player.implementMove();
-	if (player.isFiring()){ fireShell(player.firingPosition(), true); }
+	if (player.isFiring()){ fireShell(player.firingPosition(), false); }
 
 	// Check for collisions
 	bool collision = false;
