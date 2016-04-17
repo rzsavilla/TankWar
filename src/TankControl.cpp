@@ -820,9 +820,15 @@ Position TankControl::getEnemyPredictedPos() {
 	float fShellSpeed = 3.0f;
 	float fMoveSpeed = 1.0f;
 	//Calculate Enemy Tank velocity
-	myVector vel = myVector(this->enemyCurrPos.getX() - this->enemyPrevPos.getY(), this->enemyCurrPos.getY() - this->enemyPrevPos.getY());
+	myVector vel;
+	if (this->bEnemyMoving) {
+		vel = myVector(this->enemyCurrPos.getX() - this->enemyPrevPos.getX(), this->enemyCurrPos.getY() - this->enemyPrevPos.getY());
+	}
+	else {
+		vel = myVector(-0.01f, -0.01f);
+	}
 	vel = vel.unitVector();
-	vel = myVector(vel.i(), vel.j());		//Enemy Tank velocity
+	//vel = myVector(vel.i(), vel.j());		//Enemy Tank velocity
 
 	//Position difference between this and enemy tank 
 	float fDiffX = this->enemyCurrPos.getX() - this->getX();
@@ -834,10 +840,15 @@ Position TankControl::getEnemyPredictedPos() {
 
 	//Calculate adjustment angle
 	float fAngle;
-	fAngle = sin(fDiffX * vel.j() - fDiffY * vel.i() / (fShellSpeed * fMagnitude));
+	fAngle = sin((fDiffX * vel.j() - fDiffY * vel.i()) / (fShellSpeed * fMagnitude));
 	//Convert angle to vector position/position adjustment
 	float x = (cos(fAngle) * (fMagnitude));
-	float y = (-sin(fAngle) * (fMagnitude));
+	float y = (sin(fAngle) * (fMagnitude));
+	if (enemyCurrPos.getX() < this->getX()) { x *= -1.0f; }
+	if (enemyCurrPos.getY() < this->getY()) { y *= -1.0f; }
+
+	std::cout << "Adjustment: " << "X: " << x << " Y:" << y << std::endl;
+	//std::cout << "Vel:" << "vX: " << vel.i() << " vY:" << vel.j() << std::endl;
 
 	//Add Adjustment position to enemy current position
 	Position predictedPos = Position(x + enemyCurrPos.getX(), y + enemyCurrPos.getY());
