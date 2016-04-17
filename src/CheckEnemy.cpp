@@ -8,7 +8,12 @@ CheckEnemy::CheckEnemy(TankControl *ptr_tank) {
 	maintainDistance = new MaintainDistance(ptr_tank);
 
 	this->addChild(enemySpotted);
+	//this->addChild(haveAmmo);
 	this->addChild(predictAim);
+	//this->addChild(checkShoot);
+	//this->addChild(maintainDistance);
+	//this->addChild(checkShoot);
+	//this->addChild(maintainDistance);
 }
 
 CheckEnemy::~CheckEnemy() {
@@ -58,7 +63,7 @@ bool PredictAim_Action::run() {
 	float fEnemyDistance = getDistance(Position(tank->getX(), tank->getY()), tank->enemyCurrPos);
 	std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
 	//Predictive aim is unecessary when enemy is too close
-	if (tank->bEnemyMoving && fEnemyDistance > 125.0f) {				//Check if enemy tank is moving
+	if (tank->bEnemyMoving && fEnemyDistance > 80.0f) {				//Check if enemy tank is moving
 		//std::cout << "Predictive aim calculations\n";
 		//Aim turret to predicted enemy position
 		tank->setTurretDesiredPosition(tank->getEnemyPredictedPos());
@@ -68,7 +73,7 @@ bool PredictAim_Action::run() {
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);		//Will aim at enemy curret position
 	}
 	tank->bFastRotation = true;		//Tank will rotate with turret
-	if (!tank->willShellHitFreindlyBuilding()) { //Check for friendly fire
+	if (!tank->willShellHitFreindlyBuildingBuilding()) { //Check for friendly fire
 		tank->bShoot = true;				//Will shoot when on target
 	}
 	return true;
