@@ -43,6 +43,11 @@ void TankControl::m_Update() {
 			bOnTarget = true;
 		}
 	}
+	
+	//Fix for velocity calculation when enemy is first spotted
+	if (!bEnemySpotted) {
+		enemyPrevPos = enemyCurrPos;
+	}
 
 	//Reset Flags
 	resetMoveControl();
