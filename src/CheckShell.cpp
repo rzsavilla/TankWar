@@ -141,6 +141,7 @@ bool RotateToEnemy::run() {
 	if (tank->bEnemySpotted) {
 		std::cout << "Enemy Spotted\n";
 		tank->setTurretDesiredPosition(tank->enemyCurrPos);			//Execute Action
+		tank->shellWasSeenLookingForSource = false;					//Stop tracing
 		return false;
 	}
 
