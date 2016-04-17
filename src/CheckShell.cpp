@@ -45,10 +45,12 @@ bool ShellSpotted_Condition::run() {
 	if (tank->spottedShell()) {
 		if (firstSpot)
 		{
+			std::cout << "Shell Spotted\n";
 			tank->shellSeenAt = tank->shellCurrPos;
 			firstSpot = false;
 		}
 		tank->shellWasSeenLookingForSource = false;
+		tank->setTurretDesiredPosition(tank->shellSeenAt);
 		return true;
 	}
 	else {
@@ -58,7 +60,6 @@ bool ShellSpotted_Condition::run() {
 		}
 		firstSpot = true;
 		return false;
-		
 	}
 }
 
@@ -105,22 +106,24 @@ bool CanAvoid_Condition::run() {
 
 bool Evade_Action::run() {
 
-	if (tank->shellWasSeenLookingForSource)
+	if (tank->shellWasSeenLookingForSource && !tank->bHasCollided)
 	{
+		std::cout << "  Tracing Shell\n";
 		return true;
 	}
 	//Tank Move to evade 
 		//Set desired position that moves away from projectile path?
 			//Then apply move
 	//std::cout << "    Evading!!!!\n";
-	cout << "Dodge" << endl;
+	
+	cout << " Dodge" << endl;
 	tank->evadeShell();
 	if (tank->reachedDesiredPos())
 	{
 		tank->bIsDodging = false;
 		return true;
 	}
-	
+	return true;
 }
 
 
@@ -129,7 +132,7 @@ RotateToEnemy::RotateToEnemy(TankControl* ptr_tank) {
 }
 
 bool RotateToEnemy::run() {
-	
+	//Tank will trace back the shell in order to find the enemy
 	tank->shellWasSeenLookingForSource = true;
 	tank->setDesiredPosition(tank->shellSeenAt);
 	tank->setTurretDesiredPosition(tank->shellSeenAt);
@@ -141,7 +144,7 @@ bool RotateToEnemy::run() {
 		return false;
 	}
 
-	if (tank->reachedDesiredPos())
+	if (tank->reachedDesiredPos() || tank->bHasCollided)
 	{
 		tank->shellWasSeenLookingForSource = false;
 		std::cout << "Look for enemy\n";

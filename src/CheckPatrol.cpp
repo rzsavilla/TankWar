@@ -34,10 +34,11 @@ Reposition_Action::Reposition_Action(TankControl * ptr_tank) {
 }
 
 bool Reposition_Action::run() {
+	std::cout << "Patrolling\n";
 	if (tank->reachedDesiredPos() || tank->hasCollided()) {			// When tank should reposition
 		tank->bIsMoving = false;
 		if (tank->hasCollided()) { tank->goBackward(); }			// Move away from collision slightly
-		std::cout << "Reposition\n";
+		std::cout << " Reposition\n";
 	}
 
 	if (!tank->bIsMoving) {						//Reposition tank

@@ -60,8 +60,9 @@ bool EnemySpotted_Condition::run() {
 }
 
 bool PredictAim_Action::run() {
+	std::cout << " Aiming\n";
 	float fEnemyDistance = getDistance(Position(tank->getX(), tank->getY()), tank->enemyCurrPos);
-	std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
+	//std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
 	//Predictive aim is unecessary when enemy is too close
 	if (tank->bEnemyMoving && fEnemyDistance > 80.0f) {				//Check if enemy tank is moving
 		//std::cout << "Predictive aim calculations\n";
@@ -89,7 +90,6 @@ MoveAway_Action::MoveAway_Action(TankControl* ptr_tank) {
 
 bool EnemyTooClose_Condition::run() {
 	float fDist = 0.0f;
-
 	if (!tank->canFire()) {
 		//fDist = getDistance(tank->enemyCurrPos.getX(), tank->getX(), tank->enemyCurrPos.getY(), tank->getY());
 		//std::cout << fDist << std::endl;
@@ -99,7 +99,6 @@ bool EnemyTooClose_Condition::run() {
 		//}
 		return true;
 	}
-
 	return false;
 }
 
