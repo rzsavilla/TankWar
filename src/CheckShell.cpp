@@ -45,6 +45,7 @@ bool ShellSpotted_Condition::run() {
 	if (tank->spottedShell()) {
 		if (firstSpot)
 		{
+			std::cout << "Shell Spotted\n";
 			tank->shellSeenAt = tank->shellCurrPos;
 			firstSpot = false;
 		}
@@ -105,15 +106,16 @@ bool CanAvoid_Condition::run() {
 
 bool Evade_Action::run() {
 
-	if (tank->shellWasSeenLookingForSource)
+	if (tank->shellWasSeenLookingForSource && !tank->bHasCollided)
 	{
+		std::cout << "  Tracing Shell\n";
 		return true;
 	}
 	//Tank Move to evade 
 		//Set desired position that moves away from projectile path?
 			//Then apply move
 	//std::cout << "    Evading!!!!\n";
-	cout << "Dodge" << endl;
+	cout << " Dodge" << endl;
 	tank->evadeShell();
 	if (tank->reachedDesiredPos())
 	{
