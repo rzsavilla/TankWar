@@ -43,6 +43,9 @@ void TankControl::m_Update() {
 			bOnTarget = true;
 		}
 	}
+	if (!bEnemySpotted) {
+		enemyPrevPos = enemyCurrPos;
+	}
 
 	//Reset Flags
 	resetMoveControl();
