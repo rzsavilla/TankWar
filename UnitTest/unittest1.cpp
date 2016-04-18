@@ -9,17 +9,6 @@ namespace UnitTest1
 	TEST_CLASS(UnitTest1)
 	{	
 	public:
-
-		TEST_METHOD(Test1)
-		{
-			TankMind* Tank;
-
-			bool expectedValue = false;
-			bool actualValue = Tank->bIsMoving;
-
-			Assert::AreEqual(expectedValue, actualValue, L"MESSAGE", LINE_INFO());
-		}
-
 		TEST_METHOD(getDistanceCalculation)
 		{
 			TankMind* Tank;
