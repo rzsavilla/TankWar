@@ -320,6 +320,7 @@ void Game::play()// Play the game for one timestep
 				redBuildings.erase(it);
 				blueScore += 10;
 				npc.score(redScore, blueScore);
+				player.score(blueScore, redScore);
 				stop = true;
 			}
 			else it2++;
