@@ -42,5 +42,5 @@ void TankMind::move() {
 	root->run();			// run through the behaviour tree
 
 	m_Update();
-	//implementMove();
+	//implementMove();		//Cheats
 }
