@@ -64,7 +64,7 @@ bool PredictAim_Action::run() {
 	float fEnemyDistance = getDistance(Position(tank->getX(), tank->getY()), tank->enemyCurrPos);
 	//std::cout << "Enemy Distance: " << fEnemyDistance << std::endl;
 	//Predictive aim is unecessary when enemy is too close
-	if (tank->bEnemyMoving && fEnemyDistance > 80.0f) {				//Check if enemy tank is moving
+	if (tank->bEnemyMoving && fEnemyDistance > 50.0f) {				//Check if enemy tank is moving
 		//std::cout << "Predictive aim calculations\n";
 		//Aim turret to predicted enemy position
 		tank->setTurretDesiredPosition(tank->getEnemyPredictedPos());
