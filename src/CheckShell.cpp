@@ -109,7 +109,7 @@ bool Evade_Action::run() {
 	if (tank->shellWasSeenLookingForSource)
 	{
 		std::cout << "  Tracing Shell\n";
-		//return true;
+		return true;
 	}
 	//Tank Move to evade 
 		//Set desired position that moves away from projectile path?
@@ -133,12 +133,14 @@ RotateToEnemy::RotateToEnemy(TankControl* ptr_tank) {
 
 bool RotateToEnemy::run() {
 	//Tank will trace back the shell in order to find the enemy
-	if (!tank->bIsDodging) {
+	if (tank->bIsDodging) {
 		tank->shellWasSeenLookingForSource = true;
 	}
-	//tank->setDesiredPosition(tank->shellSeenAt);
-	tank->setTurretDesiredPosition(tank->shellSeenAt);
-	//tank->bFastRotation = true;
+	else {
+		tank->setDesiredPosition(tank->shellSeenAt);
+		tank->setTurretDesiredPosition(tank->shellSeenAt);
+		//tank->bFastRotation = true;
+	}
 
 	if (tank->bEnemySpotted) {
 		std::cout << "Enemy Spotted\n";
