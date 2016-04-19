@@ -44,7 +44,7 @@ bool EnemyBaseSpotted_Condition::run() {
 
 bool Winning_Condition::run() {
 	std::cout << " Check if Winning\n";
-	if (tank->iMyScore > tank->iEnemyScore + 50.0f) {
+	if (tank->iMyScore > tank->iEnemyScore) {
 		std::cout << "  Winning\n";
 		return true;
 	}
